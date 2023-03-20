@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { SigninComponent } from './signin/signin.component';
 import { HomeComponent } from './home/home.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -33,14 +35,15 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
   declarations: [
     AppComponent,
-    SigninComponent,
-    HomeComponent
+    HomeComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
