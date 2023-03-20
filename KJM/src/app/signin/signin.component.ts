@@ -1,5 +1,6 @@
 import { Component,OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/firestore/auth.service';
+import { AngularFireAuth  } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-signin',
@@ -7,6 +8,8 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit{
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService) {
+    
+  }
   ngOnInit() {}
 }
