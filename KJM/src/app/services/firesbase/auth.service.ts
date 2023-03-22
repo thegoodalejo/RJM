@@ -14,7 +14,8 @@ export class AuthService {
   constructor(
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
     private fireStore: FirestoreService,
-  ) { }
+  ) {
+  }
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new GoogleAuthProvider());

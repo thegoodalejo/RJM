@@ -8,10 +8,10 @@ import { LoginPageComponent } from './login-page/login-page.component';
 
 
 const routes: Routes = [
-  /*{
-    path: 'home',
-    component: HomeComponent,
-  }*/
+  { path: '', component: HomeComponent,},
+  { path: 'home', component : HomeComponent },
+  { path: 'app-login-page', component: LoginPageComponent },
+  //{ path: 'heroes', component: HeroListComponent },
 ];
 
 @NgModule({
