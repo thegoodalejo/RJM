@@ -36,6 +36,10 @@ export class AuthService {
 
     this.fireStore.getCollection();
   }
+
+  async AuthLogOut(){
+    await this.fireAuth.signOut();
+  }
   isAuth(){
     return this.fireAuth.authState;
   }

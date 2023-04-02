@@ -8,10 +8,20 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatNativeDateModule } from '@angular/material/core';
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { HomeComponent } from './home/home.component';
-import { LoginPageComponent } from './login-page/login-page.component';
+import { HomeComponent } from './pages/home/home.component';
+import { GoogleLogoutComponent } from './components/google-logout/google-logout.component';
+import { GoogleLogoinComponent } from './components/google-logoin/google-logoin.component';
+import { LoginComponent } from './pages/login/login.component';
+import { AfirmationFormComponent } from './components/afirmation-form/afirmation-form.component';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -36,14 +46,26 @@ const app = initializeApp(firebaseConfig);
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginPageComponent
+    LoginComponent,
+    GoogleLogoutComponent,
+    GoogleLogoinComponent,
+    AfirmationFormComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

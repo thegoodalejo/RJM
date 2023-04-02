@@ -1,0 +1,25 @@
+<p>afirmation-form works!</p>
+
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+
+    <label for="fecha">Fecha:</label>
+<input matInput [matDatepicker]="picker" formControlName="fecha">
+<mat-hint>MM/DD/YYYY</mat-hint>
+<mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-datepicker #picker></mat-datepicker>
+
+    <label for="nombreAfirmador">Nombre Afirmador:</label>
+    <input type="text" formControlName="nombreAfirmador" />
+
+    <label for="personaAfirmada">Persona Afirmada:</label>
+    <select formControlName="personaAfirmada">
+      <option *ngFor="let persona of personas" [value]="persona">{{ persona }}</option>
+    </select>
+
+    <label for="descripcion">Descripción:</label>
+    <textarea formControlName="descripcion"></textarea>
+
+    <button type="submit" [disabled]="myForm.invalid">Enviar</button>
+  </form>
+
+  

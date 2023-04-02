@@ -1,0 +1,38 @@
+/* Estilos para dispositivos móviles */
+@media only screen and (max-width: 767px) {
+	/* Oculta el menú de navegación de escritorio */
+	.nav-desktop {
+		display: none;
+	}
+
+	/* Muestra el menú de navegación móvil */
+	.nav-mobile {
+		display: block;
+	}
+
+	/* Estilos adicionales para el menú de navegación móvil */
+	.icon {
+		display: block;
+	}
+
+	nav ul.nav-mobile {
+		display: none;
+	}
+
+	nav ul.nav-mobile.active {
+		display: block;
+	}
+}
+
+/* Estilos para pantallas más grandes */
+@media only screen and (min-width: 768px) {
+	/* Oculta el menú de navegación móvil */
+	.nav-mobile {
+		display: none;
+	}
+
+	/* Muestra el menú de navegación de escritorio */
+	.nav-desktop {
+		display: block;
+	}
+}

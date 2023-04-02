@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/firesbase/auth.service';
+import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +19,7 @@ export class HomeComponent {
         //this.router.navigate(['/app-login-page']);
       }else{
         console.log('redireccionar al login')
-        this.router.navigate(['/app-login-page']);
+        this.router.navigate(['/app-login']);
       }
     })
   }

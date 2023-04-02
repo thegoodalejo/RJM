@@ -1,0 +1,52 @@
+<head>
+	<title>Mi página web</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+</head>
+<body>
+	<header>
+        <div class="container">
+            <h1>Mi página web</h1>
+            <nav>
+                <ul class="nav-desktop">
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Acerca de</a></li>
+                    <li><a href="#">Servicios</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+                <a href="#" class="icon"><i class="fa fa-bars"></i></a>
+                <ul class="nav-mobile">
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Acerca de</a></li>
+                    <li><a href="#">Servicios</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+
+	<section>
+		<div class="container">
+			<app-afirmation-form></app-afirmation-form>
+		</div>
+	</section>
+
+	<footer>
+		<div class="container">
+			<p>© 2023 Mi página web</p>
+		</div>
+	</footer>
+
+	<script src="https://kit.fontawesome.com/1234567890.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('.icon').click(function(){
+				$('nav ul.nav-mobile').toggleClass('active');
+			});
+		});
+	</script>
+</body>
+<app-google-logout></app-google-logout>
