@@ -39,7 +39,11 @@ export class FirestoreService {
   async createNewAfirmacionRecord(data: ToAfirm) {
     console.log("New doc data: => ", data);
     const afirmacionRef = collection(this.firestore.firestore,"afirmacionHistorial");
-    await addDoc(afirmacionRef,data);
+    if(await addDoc(afirmacionRef,data))
+    {
+      alert("Enviado...");
+    }
+
   }
 
 

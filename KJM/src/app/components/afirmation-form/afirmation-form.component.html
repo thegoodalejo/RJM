@@ -13,7 +13,7 @@
   <input type="text" formControlName="nombreAfirmador" readonly id="afirmador"/>
 
   <label for="personaAfirmada">Persona Afirmada:</label>
-  <select formControlName="personaAfirmada" id="personaAfirmada">
+  <select formControlName="personaAfirmada" id="personaAfirmada" [(ngModel)]="selectedOption" (ngModelChange)="onChangeOption()">
     <option *ngFor="let persona of personas" [value]="persona.nombre">{{ persona.nombre }}</option>
   </select>
 

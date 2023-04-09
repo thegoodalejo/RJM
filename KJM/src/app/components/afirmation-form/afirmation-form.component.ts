@@ -29,8 +29,20 @@ export class AfirmationFormComponent implements OnInit {
 
   nombre = document.getElementById('fecha');
 
+  selectedOption!: string;
+
   constructor(private fb: FormBuilder, private fireService: FirestoreService, private fireAuth: AuthService) {
 
+  }
+
+  onChangeOption() {
+    console.log(this.selectedOption);
+    const opcionSeleccionada = this.selectedOption;
+    console.log(`La opción seleccionada es: ${opcionSeleccionada}`);
+    const contactoEncontrado = this.personas.find((contacto) => contacto.nombre === opcionSeleccionada);
+
+    const inputElement = document.getElementById("telPersonaAfirmada") as HTMLInputElement;
+    inputElement.value = "" + contactoEncontrado?.telefono;
   }
 
   ngOnInit() {
@@ -49,7 +61,7 @@ export class AfirmationFormComponent implements OnInit {
       console.error(error);
     });
 
-    const miDropdown = document.getElementById('personaAfirmada') as HTMLSelectElement;
+    /*const miDropdown = document.getElementById('personaAfirmada') as HTMLSelectElement;
     miDropdown.addEventListener('change', () => {
       const opcionSeleccionada = miDropdown.value;
       console.log(`La opción seleccionada es: ${opcionSeleccionada}`);
@@ -58,7 +70,7 @@ export class AfirmationFormComponent implements OnInit {
       const inputElement = document.getElementById("telPersonaAfirmada") as HTMLInputElement;
       inputElement.value = "" + contactoEncontrado?.telefono;
 
-    });
+    });*/
   }
 
   onSubmit() {
@@ -81,6 +93,8 @@ export class AfirmationFormComponent implements OnInit {
     }
 
     this.fireService.createNewAfirmacionRecord(data);
+
+  (<HTMLInputElement>document.getElementById('descripcion')).value = '';
 
   }
 }
