@@ -9,17 +9,8 @@ import { Router } from '@angular/router';
 })
 export class GoogleLogoinComponent {
   constructor(
-    public fireAuth: AuthService,
-    private router: Router,
+    public fireAuth: AuthService
   ) {
-    this.fireAuth.isAuth().subscribe(res => {
-      if (res) {
-        console.log('logueado redireccionar al HOME')
-        this.router.navigate(['/app-home']);
-      } else {
-        console.log('quedarse en login')
-        this.router.navigate(['/app-login']);
-      }
-    })
+    
   }
 }

@@ -16,7 +16,6 @@ export class HomeComponent {
     this.fireAuth.isAuth().subscribe( res => {
       if(res){
         console.log('logueado quedarse en HOME')
-        //this.router.navigate(['/app-login-page']);
       }else{
         console.log('redireccionar al login')
         this.router.navigate(['/app-login']);

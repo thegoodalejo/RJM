@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat';
+import { firstValueFrom, from } from 'rxjs';
 import { FirestoreService } from './firestore.service';
+import User from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -30,17 +32,29 @@ export class AuthService {
       console.log(this.user.user?.displayName);
       console.log(this.user.user?.uid);
       console.log(this.user.user?.email);
+
+      this.fireStore.createNewUser(this.user.user);
+
     } catch (error) {
       console.log(error);
     }
-
-    this.fireStore.getCollection();
   }
 
-  async AuthLogOut(){
+  async AuthLogOut() {
     await this.fireAuth.signOut();
   }
-  isAuth(){
+
+  isAuth() {
     return this.fireAuth.authState;
+  }
+
+  getCurrentUserId(){
+    //console.log("dfghjkljhgfdsfghjk" + this.user.user?.uid?.toString());
+    return this.user.user?.uid?.toString();
+  }
+
+  getCurrentUserName(){
+    //console.log("Retornando getCurrentUserName " + this.user.user?.displayName)
+    return  this.user.user?.displayName?.toString();
   }
 }
