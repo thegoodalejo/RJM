@@ -1,37 +1,67 @@
 <head>
-	<title>Mi página web</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
 </head>
-<body>
-	<header>
-        <div class="container">
-            <h1>Afirmacion - Piloto</h1>
-            <nav>
-                <ul class="nav-desktop">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Acerca de</a></li>
-                    <li><a href="#">Servicios</a></li>
-                    <li><a href="#">Contacto</a></li>
-                </ul>
-                <a href="#" class="icon"><i class="fa fa-bars"></i></a>
-                <ul class="nav-mobile">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Acerca de</a></li>
-                    <li><a href="#">Servicios</a></li>
-                    <li><a href="#">Contacto</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
 
+<body>
+	<header class="header">
+		<mat-toolbar class="mat-elevation-z8">
+			<button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+				<mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+				<mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+			</button>
+			 RJM - ReyJesusMedellin
+		</mat-toolbar>
+
+		<mat-sidenav-container>
+			<mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+				<img class="avatar mat-elevation-z8" [src]="userImageURL" alt="User Profile Image" />
+
+				<h4 class="name">{{user?.displayName}}</h4>
+				<p class="designation">{{user?.uid}}</p>
+
+				<mat-divider></mat-divider>
+
+				<button mat-button class="menu-button" routerLink="/home">
+					<mat-icon>home</mat-icon>
+					<span>Home</span>
+				</button>
+				<button mat-button class="menu-button" routerLink="/profile">
+					<mat-icon>person</mat-icon>
+					<span>Profile</span>
+				</button>
+				<button mat-button class="menu-button" routerLink="/about">
+					<mat-icon>info</mat-icon>
+					<span>About</span>
+				</button>
+
+				<mat-divider></mat-divider>
+
+				<button mat-button class="menu-button" (click)="fireAuth.AuthLogOut()">
+					<mat-icon>exit_to_app</mat-icon>
+					<span>LogOut</span>
+				</button>
+			</mat-sidenav>
+			<mat-sidenav-content>
+				<div class="container">
+					<h1>Afirmacion - Piloto</h1>
+					<h1>{{user?.displayName}}</h1>
+					<h1>{{user?.uid}}</h1>
+				</div>
+			</mat-sidenav-content>
+		</mat-sidenav-container>
+	</header>
+
+	
+
+	<!--
 	<section>
 		<div class="container">
 			<app-afirmation-form></app-afirmation-form>
 		</div>
 	</section>
+	-->
+
 
 	<footer>
 		<div class="container">
@@ -43,11 +73,10 @@
 	<script src="https://kit.fontawesome.com/1234567890.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-		$(document).ready(function(){
-			$('.icon').click(function(){
+		$(document).ready(function () {
+			$('.icon').click(function () {
 				$('nav ul.nav-mobile').toggleClass('active');
 			});
 		});
 	</script>
 </body>
-

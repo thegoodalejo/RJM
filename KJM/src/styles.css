@@ -11,14 +11,6 @@ body {
     padding: 16px;
   }
 
-  h1 {
-    font-weight: 500;
-    font-size: 36px;
-    color: #2196F3;
-    text-align: center;
-    margin-bottom: 32px;
-  }
-
   .btn-google {
     display: block;
     margin: 0 auto;

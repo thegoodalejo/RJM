@@ -5,6 +5,7 @@ import firebase from 'firebase/compat';
 import { firstValueFrom, from } from 'rxjs';
 import { FirestoreService } from './firestore.service';
 import User from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class AuthService {
   constructor(
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
     private fireStore: FirestoreService,
+    private router: Router
   ) {
   }
   // Sign in with Google
@@ -42,6 +44,7 @@ export class AuthService {
 
   async AuthLogOut() {
     await this.fireAuth.signOut();
+    this.router.navigate(['/app-login']);
   }
 
   isAuth() {

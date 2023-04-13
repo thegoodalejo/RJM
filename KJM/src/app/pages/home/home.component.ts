@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -9,18 +10,28 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
+  user: any;
+  userImageURL: any = '';
+
+
   constructor(
-    private fireAuth: AuthService,
-    private router:Router
-    ){
-    this.fireAuth.isAuth().subscribe( res => {
-      if(res){
-        console.log('logueado quedarse en HOME')
-      }else{
-        console.log('redireccionar al login')
-        this.router.navigate(['/app-login']);
-      }
-    })
+    public fireAuth: AuthService,
+    private router: Router
+  ) {
+    this.fireAuth.isAuth().pipe(
+      map((user) => {
+        if (user) {
+          // Si el usuario está autenticado, almacena su información en la variable user
+          this.user = user;
+          this.userImageURL = user.photoURL;
+        } else {
+          // Si el usuario no está autenticado, establece la variable user en null
+          this.user = null;
+        }
+      })
+    ).subscribe();
+
+    
   }
 
 }

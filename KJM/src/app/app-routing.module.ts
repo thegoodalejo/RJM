@@ -3,15 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-//import { ErrorComponent } from './error/error.component';
-//import { AuthGuard } from './auth.guard';
+import { AuthGuardService } from './services/auth-guard.service';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent,},
-  { path: 'app-home', component : HomeComponent },
+  { path: '', component: LoginComponent,},
+  { path: 'app-home', component : HomeComponent, canActivate: [AuthGuardService] },
   { path: 'app-login', component: LoginComponent },
-  //{ path: 'heroes', component: HeroListComponent },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

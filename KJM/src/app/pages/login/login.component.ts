@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   constructor(
     public fireAuth: AuthService,
     private router: Router,
@@ -20,5 +20,8 @@ export class LoginComponent {
         console.log('quedarse en login')
       }
     })
+  }
+  ngOnInit(): void {
+    console.log("LoginAuth()");
   }
 }

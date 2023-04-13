@@ -56,21 +56,10 @@ export class AfirmationFormComponent implements OnInit {
     this.fireService.getListToCall(this.fireAuth.getCurrentUserId()).then((contactos: Contacto[]) => {
       console.log(contactos);
       this.personas = contactos;
-      // Aquí puedes trabajar con la lista de contactos
     }).catch((error) => {
       console.error(error);
     });
 
-    /*const miDropdown = document.getElementById('personaAfirmada') as HTMLSelectElement;
-    miDropdown.addEventListener('change', () => {
-      const opcionSeleccionada = miDropdown.value;
-      console.log(`La opción seleccionada es: ${opcionSeleccionada}`);
-      const contactoEncontrado = this.personas.find((contacto) => contacto.nombre === opcionSeleccionada);
-
-      const inputElement = document.getElementById("telPersonaAfirmada") as HTMLInputElement;
-      inputElement.value = "" + contactoEncontrado?.telefono;
-
-    });*/
   }
 
   onSubmit() {
