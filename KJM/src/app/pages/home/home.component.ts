@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, } from '@angular/core';
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -30,8 +30,6 @@ export class HomeComponent {
         }
       })
     ).subscribe();
-
-    
   }
 
 }

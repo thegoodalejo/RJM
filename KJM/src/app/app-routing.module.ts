@@ -5,11 +5,21 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AfirmationFormComponent } from './components/afirmation-form/afirmation-form.component';
+import { MembreciaComponent } from './pages/membrecia/membrecia.component';
+import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent,},
-  { path: 'app-home', component : HomeComponent, canActivate: [AuthGuardService] },
+  { path: '', component: LoginComponent, },
+  {
+    path: 'app-home', component: HomeComponent,
+    canActivate: [AuthGuardService],
+    children: [
+      { path: 'app-afirmacion', component: AfirmacionComponent},
+      { path: 'app-membrecia', component: MembreciaComponent},
+    ]
+  },
   { path: 'app-login', component: LoginComponent },
   { path: '**', component: NotFoundComponent }
 ];

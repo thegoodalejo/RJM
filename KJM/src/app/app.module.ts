@@ -30,6 +30,8 @@ import { AfirmationFormComponent } from './components/afirmation-form/afirmation
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { InicioComponent } from './components/inicio/inicio.component';
+import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -60,7 +62,9 @@ const app = initializeApp(firebaseConfig);
     AfirmationFormComponent,
     AfirmacionComponent,
     NotFoundComponent,
-    NavBarComponent
+    NavBarComponent,
+    InicioComponent,
+    MembreciaComponent
     
   ],
   imports: [

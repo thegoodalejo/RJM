@@ -22,17 +22,13 @@
 
 				<mat-divider></mat-divider>
 
-				<button mat-button class="menu-button" routerLink="/home">
+				<button mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion']">
 					<mat-icon>home</mat-icon>
 					<span>Home</span>
 				</button>
-				<button mat-button class="menu-button" routerLink="/profile">
+				<button mat-button class="menu-button" [routerLink]="['/app-home/app-membrecia']">
 					<mat-icon>person</mat-icon>
-					<span>Profile</span>
-				</button>
-				<button mat-button class="menu-button" routerLink="/about">
-					<mat-icon>info</mat-icon>
-					<span>About</span>
+					<span>Afirmacion</span>
 				</button>
 
 				<mat-divider></mat-divider>
@@ -44,9 +40,7 @@
 			</mat-sidenav>
 			<mat-sidenav-content>
 				<div class="container">
-					<h1>Afirmacion - Piloto</h1>
-					<h1>{{user?.displayName}}</h1>
-					<h1>{{user?.uid}}</h1>
+					<router-outlet>a</router-outlet>
 				</div>
 			</mat-sidenav-content>
 		</mat-sidenav-container>
