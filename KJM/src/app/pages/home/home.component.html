@@ -10,7 +10,7 @@
 				<mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
 				<mat-icon *ngIf="sidenav.opened"> close </mat-icon>
 			</button>
-			 RJM - ReyJesusMedellin
+			RJM - ReyJesusMedellin
 		</mat-toolbar>
 
 		<mat-sidenav-container>
@@ -22,13 +22,24 @@
 
 				<mat-divider></mat-divider>
 
-				<button mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion']">
+				<button mat-button class="menu-button" [routerLink]="['/app-home/app-inicio']">
 					<mat-icon>home</mat-icon>
 					<span>Home</span>
 				</button>
+				<button mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion', user]">
+					<mat-icon>call</mat-icon>
+					<span>Afirmacion</span>
+				</button>
 				<button mat-button class="menu-button" [routerLink]="['/app-home/app-membrecia']">
 					<mat-icon>person</mat-icon>
-					<span>Afirmacion</span>
+					<span>Membrecia</span>
+				</button>
+
+				<mat-divider></mat-divider>
+
+				<button mat-button class="menu-button" (click)="fireAuth.AuthLogOut()">
+					<mat-icon>settings</mat-icon>
+					<span>Settings</span>
 				</button>
 
 				<mat-divider></mat-divider>
@@ -40,13 +51,13 @@
 			</mat-sidenav>
 			<mat-sidenav-content>
 				<div class="container">
-					<router-outlet>a</router-outlet>
+					<router-outlet></router-outlet>
 				</div>
 			</mat-sidenav-content>
 		</mat-sidenav-container>
 	</header>
 
-	
+
 
 	<!--
 	<section>

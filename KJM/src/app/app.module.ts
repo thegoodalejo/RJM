@@ -19,6 +19,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatSliderModule} from '@angular/material/slider'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -65,7 +70,7 @@ const app = initializeApp(firebaseConfig);
     NavBarComponent,
     InicioComponent,
     MembreciaComponent
-    
+
   ],
   imports: [
     BrowserModule,
@@ -86,6 +91,12 @@ const app = initializeApp(firebaseConfig);
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    MatStepperModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatSliderModule,
+    MatSlideToggleModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

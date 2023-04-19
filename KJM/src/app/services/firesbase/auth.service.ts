@@ -12,13 +12,17 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private user!: firebase.auth.UserCredential;
+  user!: firebase.User;
 
   constructor(
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
     private fireStore: FirestoreService,
     private router: Router
   ) {
+    this.fireAuth.authState.subscribe(user => {
+      if(user)
+      this.user = user
+    });
   }
   // Sign in with Google
   GoogleAuth() {
@@ -30,12 +34,8 @@ export class AuthService {
       const result = await this.fireAuth
         .signInWithPopup(provider);
       console.log('You have been successfully logged in!');
-      this.user = result;
-      console.log(this.user.user?.displayName);
-      console.log(this.user.user?.uid);
-      console.log(this.user.user?.email);
 
-      this.fireStore.createNewUser(this.user.user);
+      this.fireStore.createNewUser(this.user?.uid);
 
     } catch (error) {
       console.log(error);
@@ -51,7 +51,7 @@ export class AuthService {
     return this.fireAuth.authState;
   }
 
-  getCurrentUserId(){
+ /* getCurrentUserId(){
     //console.log("dfghjkljhgfdsfghjk" + this.user.user?.uid?.toString());
     return this.user.user?.uid?.toString();
   }
@@ -59,5 +59,5 @@ export class AuthService {
   getCurrentUserName(){
     //console.log("Retornando getCurrentUserName " + this.user.user?.displayName)
     return  this.user.user?.displayName?.toString();
-  }
+  }*/
 }

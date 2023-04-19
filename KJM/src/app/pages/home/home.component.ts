@@ -24,6 +24,7 @@ export class HomeComponent {
           // Si el usuario está autenticado, almacena su información en la variable user
           this.user = user;
           this.userImageURL = user.photoURL;
+          console.log("ojo aca si tengo la info del usuario " + user.displayName);
         } else {
           // Si el usuario no está autenticado, establece la variable user en null
           this.user = null;

@@ -48,12 +48,12 @@ export class AfirmationFormComponent implements OnInit {
   ngOnInit() {
     this.myForm = this.fb.group({
       fecha: [today, Validators.required],
-      nombreAfirmador: [this.fireAuth.getCurrentUserName()],
+      nombreAfirmador: [this.fireAuth.user?.displayName],
       personaAfirmada: ['', Validators.required],
       descripcion: ['', Validators.required],
     });
 
-    this.fireService.getListToCall(this.fireAuth.getCurrentUserId()).then((contactos: Contacto[]) => {
+    this.fireService.getListToCall(this.fireAuth.user?.uid).then((contactos: Contacto[]) => {
       console.log(contactos);
       this.personas = contactos;
     }).catch((error) => {

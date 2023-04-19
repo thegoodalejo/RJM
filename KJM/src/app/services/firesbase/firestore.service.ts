@@ -12,11 +12,16 @@ import ToAfirm from 'src/app/models/afirmacionList';
 export class FirestoreService {
 
   constructor(
-    private firestore: AngularFirestore,
-    //private fireAuth: AuthService
+    private firestore: AngularFirestore
   ) { }
 
   async createNewUser(user: any) {
+    console.log("Creando usuario ?????????", user.uid);
+    try {
+      
+    } catch (error) {
+      
+    }
     const userRef = this.firestore.collection('usuarios').doc(user.uid);
     const userDoc = await lastValueFrom(userRef.get());
 
@@ -61,20 +66,11 @@ export class FirestoreService {
     if (docSnap.exists()) {
 
       console.log("Document data:", docSnap.data());
-      /*let personas: any[] = ['']
-      docSnap.data().listToCall.forEach((element: { nombre: any, telefono: any }) => {
-        console.log("Nombre => " + element.nombre);
-        console.log("Telefono => " + element.telefono);
-        console.log("Objeto => " + element);
-        personas.push(element)
-      });*/
-
       return docSnap.data().listToCall;
-
-
+      
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log("No such document! para " + uid);
       return [''];
     }
 

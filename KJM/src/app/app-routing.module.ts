@@ -5,9 +5,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { AfirmationFormComponent } from './components/afirmation-form/afirmation-form.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
+import { InicioComponent } from './components/inicio/inicio.component';
 
 
 const routes: Routes = [
@@ -16,6 +16,7 @@ const routes: Routes = [
     path: 'app-home', component: HomeComponent,
     canActivate: [AuthGuardService],
     children: [
+      { path: 'app-inicio', component: InicioComponent},
       { path: 'app-afirmacion', component: AfirmacionComponent},
       { path: 'app-membrecia', component: MembreciaComponent},
     ]
