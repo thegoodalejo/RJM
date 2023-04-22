@@ -67,12 +67,13 @@ export class AfirmacionComponent {
       })
     ).subscribe(
       () => {
-        this.fireService.getListToCall(this.fireAuth.user?.uid).then((contactos: Contacto[]) => {
+        this.fireService.listaPersonasAfirmacion(this.fireAuth.user?.uid);
+        /*this.fireService.getListToCall(this.fireAuth.user?.uid).then((contactos: Contacto[]) => {
           console.log(contactos);
           this.personas = contactos;
         }).catch((error) => {
           console.error(error);
-        });
+        });*/
       }
     );
   }
@@ -96,6 +97,7 @@ export class AfirmacionComponent {
     }
 
     this.fireService.createNewAfirmacionRecord(data);
+    
   }
 
 

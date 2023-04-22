@@ -22,8 +22,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatSliderModule} from '@angular/material/slider'
+import { MatSliderModule } from '@angular/material/slider'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -37,6 +38,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -95,8 +97,8 @@ const app = initializeApp(firebaseConfig);
     MatSelectModule,
     MatCheckboxModule,
     MatSliderModule,
-    MatSlideToggleModule
-
+    MatSlideToggleModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -37,7 +37,6 @@
       <div class="container-afirmacion" *ngIf="!personaContesta">
         <mat-label class="mat-label">Novedades</mat-label>
         <mat-checkbox [(ngModel)]="personaNumeroIncorrecto">Numero incorrecto</mat-checkbox>
-        <mat-checkbox [(ngModel)]="personaFueraDeLaCiudad">Fuera de la ciudad</mat-checkbox>
       </div>
 
       <div class="container-afirmacion" *ngIf="personaContesta">
@@ -46,6 +45,7 @@
           ¿La persona esta interesada?:
           {{personaInteresada ? 'Sí' : 'No' }}
         </mat-slide-toggle>
+        <mat-checkbox [(ngModel)]="personaFueraDeLaCiudad">Fuera de la ciudad</mat-checkbox>
         <mat-checkbox [(ngModel)]="personaOtraIglesia" *ngIf="!personaInteresada">Se congrega en otra
           Iglesia</mat-checkbox>
       </div>

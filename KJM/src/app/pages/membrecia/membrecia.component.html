@@ -1,1 +1,73 @@
-<p>membrecia works!</p>
+<div class="container-membrecia">
+    <mat-label>¿Persona autorizo compartir su informacion?</mat-label>
+    <mat-slide-toggle [(ngModel)]="autorizaCompartirInfo" [checked]="autorizaCompartirInfo">
+        {{autorizaCompartirInfo ? 'Sí' : 'No' }}
+    </mat-slide-toggle>
+
+    <mat-form-field class="container-membrecia" appearance="fill" *ngIf="autorizaCompartirInfo">
+        <mat-label>Nuemero de Identificacion</mat-label>
+        <input matInput [(ngModel)]="numeroDocumento" >
+        <mat-error>
+            This field is required
+        </mat-error>
+    </mat-form-field>
+</div>
+<mat-vertical-stepper class="container-membrecia" *ngIf="autorizaCompartirInfo && numeroDocumento.length > 5">
+    <mat-step>
+        <ng-template matStepLabel>Info Basica</ng-template>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Nombre completo</mat-label>
+            <input matInput [(ngModel)]="nombre">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Telefono</mat-label>
+            <input matInput [(ngModel)]="telefono">
+        </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Fecha nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="fechaNacimiento" readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Genero</mat-label>
+            <mat-select [(ngModel)]="genero">
+                <mat-option value="Hombre">Hombre</mat-option>
+                <mat-option value="Mujer">Mujer</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button matStepperNext>Siguiente</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Ubicacion y Correo</ng-template>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Barrio</mat-label>
+            <input matInput [(ngModel)]="barrio">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Direccion</mat-label>
+            <input matInput [(ngModel)]="direccion">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Correo electronico</mat-label>
+            <input matInput [(ngModel)]="correo">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Red a Asignar</mat-label>
+            <mat-select [(ngModel)]="redPerteneciente">
+                <mat-option value="NISSI">NISSI</mat-option>
+                <mat-option value="ELYON">ELYON</mat-option>
+                <mat-option value="YAHWEH">YAHWEH</mat-option>
+                <mat-option value="YESHUA">YESHUA</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Finalizar</ng-template>
+        <button class="button-submit" mat-button color="primary" (click)="crearMiembro()">Enviar</button>
+    </mat-step>
+</mat-vertical-stepper>
