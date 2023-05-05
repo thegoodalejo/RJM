@@ -40,8 +40,8 @@ import { InicioComponent } from './components/inicio/inicio.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// TODO: Compilacion => ng build --configuration production
+// TODO: Deploy => firebase deploy
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

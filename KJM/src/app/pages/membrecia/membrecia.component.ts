@@ -13,13 +13,13 @@ export class MembreciaComponent {
 
   //step 1
   autorizaCompartirInfo: boolean = false;
-  numeroDocumento: string = '';
 
   //step 2
   nombre: string = '';
   telefono: string = '';
   fechaNacimiento: string = '';
   genero: string = '';
+  quienLoInvito: string = '';
 
   barrio: string = '';
   direccion: string = '';
@@ -42,30 +42,31 @@ export class MembreciaComponent {
 
   crearMiembro() {
     const data: NuevoMiembro = {
-      numeroDocumento: this.numeroDocumento,
 
       nombre: this.nombre,
       telefono: this.telefono,
       fechaNacimiento: this.fechaNacimiento,
       genero: this.genero,
+      quienLoInvito: this.quienLoInvito,
 
       barrio: this.barrio,
       direccion: this.direccion,
       correo: this.correo,
-      redPerteneciente: this.redPerteneciente
+      redPerteneciente: this.redPerteneciente,
+
+      historialAfirmacion : []
     }
 
     this._firestoreService.crearNuevoMiembro(data);
 
     this.autorizaCompartirInfo = false;
 
-    this.numeroDocumento = '';
-
     //step 2
     this.nombre = '';
     this.telefono = '';
     this.fechaNacimiento = '';
     this.genero = '';
+    this.quienLoInvito = '';
 
     this.barrio = '';
     this.direccion = '';

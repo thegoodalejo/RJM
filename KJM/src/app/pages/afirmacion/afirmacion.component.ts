@@ -8,6 +8,10 @@ import { MatStepper } from '@angular/material/stepper';
 import { map } from 'rxjs/operators';
 import ToAfirm from 'src/app/models/afirmacionList';
 import { ActivatedRoute } from '@angular/router';
+import NuevoMiembro from 'src/app/models/nuevoMiembro';
+import AfirmacionReporte from 'src/app/models/afirmacionReporte';
+import firebase from 'firebase/compat';
+import ObjectWithReference from 'src/app/models/objectWithReferenc';
 
 @Component({
   selector: 'app-afirmacion',
@@ -22,12 +26,14 @@ export class AfirmacionComponent {
   //user info
   user: any;
 
-  //para el step 1
-  fechaReporte: any;
   //para el dropdown
-  personas: Contacto[] = [];
+  personas: ObjectWithReference<NuevoMiembro>[] = [];
   telPersonaAfirmada: any;
   selectedOption!: string;
+
+  //para el step 1
+  personaRef!: firebase.firestore.DocumentReference;
+  fechaReporte: any;
 
   //para el step 2
   //contesta si no 
@@ -35,6 +41,7 @@ export class AfirmacionComponent {
 
   //novedades
   personaNoContesta = false;
+  noContestaSeDejaMensaje = false;
   personaNumeroIncorrecto = false;
   personaFueraDeLaCiudad = false;
   personaOtraIglesia = false;
@@ -67,13 +74,9 @@ export class AfirmacionComponent {
       })
     ).subscribe(
       () => {
-        this.fireService.listaPersonasAfirmacion(this.fireAuth.user?.uid);
-        /*this.fireService.getListToCall(this.fireAuth.user?.uid).then((contactos: Contacto[]) => {
-          console.log(contactos);
-          this.personas = contactos;
-        }).catch((error) => {
-          console.error(error);
-        });*/
+        this.fireService.listaPersonasAfirmacion(this.fireAuth.user?.uid).then(obj => {
+          this.personas = obj.objetosMostrables;
+        });
       }
     );
   }
@@ -83,21 +86,43 @@ export class AfirmacionComponent {
     console.log(this.selectedOption);
     const opcionSeleccionada = this.selectedOption;
     console.log(`La opción seleccionada es: ${opcionSeleccionada}`);
-    const contactoEncontrado = this.personas.find((contacto) => contacto.nombre === opcionSeleccionada);
-    console.log(`Telefono de la opción seleccionada es: ${contactoEncontrado?.telefono}`);
-    this.telPersonaAfirmada = contactoEncontrado?.telefono;
+    const contactoEncontrado = this.personas.find((contacto) => contacto.objeto.nombre === opcionSeleccionada);
+    console.log(`Telefono de la opción seleccionada es: ${contactoEncontrado?.objeto.telefono}`);
+    if(contactoEncontrado){
+      this.personaRef = contactoEncontrado.id;
+      this.telPersonaAfirmada = contactoEncontrado.objeto.telefono;
+    }
   }
 
   enviarReporte() {
-    const data: ToAfirm = {
-      fecha: "fechaS",
-      afirmador: "afirmadorS",
-      personaAfirmada: "toAfirmPersonS",
-      descripcion: "descripcionS"
+    const data: AfirmacionReporte = {
+      //Info
+      personaRef: this.personaRef,
+      afirmador: this.user.displayName,
+      afirmadorID: this.user.uid,
+      fechaReporte: this.fechaReporte,
+
+      personaContesta: this.personaContesta,
+
+      //novedades
+      personaNoContesta: this.personaNoContesta,
+      noContestaSeDejaMensaje: this.noContestaSeDejaMensaje,
+      personaNumeroIncorrecto: this.personaNumeroIncorrecto,
+      personaFueraDeLaCiudad: this.personaFueraDeLaCiudad,
+      personaOtraIglesia: this.personaOtraIglesia,
+
+      //si contesta, entonces
+      personaInteresada: this.personaInteresada,
+      personaAsistira: this.personaAsistira,
+      personaPideOracion: this.personaPideOracion,
+
+      //para el step 3
+      reporteOracion: this.reporteOracion,
+      reporteGeneral: this.reporteGeneral
     }
 
     this.fireService.createNewAfirmacionRecord(data);
-    
+
   }
 
 

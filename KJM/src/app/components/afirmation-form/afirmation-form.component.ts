@@ -74,14 +74,14 @@ export class AfirmationFormComponent implements OnInit {
     console.log(toAfirmPersonS);
     console.log(descripcionS);
 
-    const data: ToAfirm = {
+    /*const data: ToAfirm = {
       fecha: fechaS,
       afirmador: afirmadorS,
       personaAfirmada: toAfirmPersonS,
       descripcion: descripcionS
-    }
+    }*/
 
-    this.fireService.createNewAfirmacionRecord(data);
+    //this.fireService.createNewAfirmacionRecord(data);
 
   (<HTMLInputElement>document.getElementById('descripcion')).value = '';
 

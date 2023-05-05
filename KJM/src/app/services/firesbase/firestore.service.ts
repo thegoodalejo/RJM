@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { collection, getDocs, doc, getDoc, addDoc } from "firebase/firestore";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { lastValueFrom } from 'rxjs';
-import ToAfirm from 'src/app/models/afirmacionList';
-import NuevoMiembro from 'src/app/models/nuevoMiembro';
+import { Observable, lastValueFrom } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { runTransaction } from "firebase/firestore";
 
+import ToAfirm from 'src/app/models/afirmacionList';
+import DetalleAfirmador from 'src/app/models/detalleAfirmador';
+import NuevoMiembro from 'src/app/models/nuevoMiembro';
+import AfirmacionReporte from 'src/app/models/afirmacionReporte';
+import ObjectWithReference from 'src/app/models/objectWithReferenc';
+
+
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +42,7 @@ export class FirestoreService {
       const data = {
         nombre: user.displayName,
         email: user.email,
-        rol: "Nuevo"
+        rol: ["Nuevo"]
       };
 
       await userRef.set(data)
@@ -60,17 +70,47 @@ export class FirestoreService {
         this._snackBar.open('No se pudo crear el usuario', 'Cerrar', {
           duration: 3000
         });
-       // return false;
+        // return false;
       });
   }
 
-  async createNewAfirmacionRecord(data: ToAfirm) {
+  async createNewAfirmacionRecord(data: AfirmacionReporte) {
     console.log("New doc data: => ", data);
-    const afirmacionRef = collection(this._firestore.firestore, "afirmacionHistorial");
-    if (await addDoc(afirmacionRef, data)) {
-      alert("Enviado...");
-    }
 
+    const historialReporteRef = this._firestore.collection<AfirmacionReporte>('historialAfirmacion');
+    const nuevoReporteRef = historialReporteRef.doc();
+    const nuevoReporte: AfirmacionReporte = data;
+
+    const miembroDocRef = this._firestore.doc(data.personaRef);
+
+    const transaccion = async (transaction: firebase.firestore.Transaction): Promise<void> => {
+      // retorno el obj miembro
+      const miembroDoc = await transaction.get(miembroDocRef.ref);
+      // retorno el array del obj miembro
+      const historialAfirmacion: firebase.firestore.DocumentReference[] = miembroDoc.get('historialAfirmacion') || []; // si es nulo, inicializarlo como un array vacío
+      // creo el nuevo reporte de afirmacion
+      transaction.set(nuevoReporteRef.ref, nuevoReporte);
+      // agrego la referencia al array del obj miembro
+      historialAfirmacion.push(nuevoReporteRef.ref);
+      // actualizo la info de obj miembro
+      transaction.update(miembroDocRef.ref, { historialAfirmacion: historialAfirmacion });
+    };
+    await this._firestore.firestore.runTransaction(transaccion).then(
+      () => {
+        this._snackBar.open('Reporte creado correctamente', 'Cerrar',
+          {
+            duration: 3000
+          }
+        );
+        //return true;
+      })
+      .catch(error => {
+        this._snackBar.open('No se pudo crear el reporte', 'Cerrar', {
+          duration: 3000
+        });
+        console.log(error);
+        // return false;
+      });
   }
 
 
@@ -98,21 +138,40 @@ export class FirestoreService {
 
   }
 
-  async listaPersonasAfirmacion(uid: any){
+  async listaPersonasAfirmacion(uid: any): Promise<DetalleAfirmador> {
+
+    const objetoPpal: DetalleAfirmador = {
+      nombre: '',
+      listToCall: [],
+      objetosMostrables: []
+    };
 
     console.log('nuevo servicio, retirnar lista de personas para afirmar');
 
     const docRef = doc(this._firestore.firestore, "afirmacion", uid);
     const docSnap = await getDoc(docRef) as any;
-    const references = docSnap.data().listToCall;
+    objetoPpal.listToCall = docSnap.data().listToCall;
+    objetoPpal.nombre = docSnap.data().nombre;
 
-    console.log(references);
+    console.log("Initial Data", docSnap.data());
+    console.log(objetoPpal.listToCall);
+    console.log(objetoPpal.nombre);
 
-    /*const referencedObjects = await Promise.all(references.map(async (reference: { id: any; }) => {
-      const collectionRef = collection(this._firestore.firestore, 'otraColeccion');
-      const query = query(collectionRef, where('id', '==', reference.id));
-      const querySnapshot = await getDocs(query);
-      const documents = querySnapshot.docs.map(doc => doc.data());*/
+    for (const ref of objetoPpal.listToCall) {
+      const docSnap = await getDoc(ref);
+      const datosDoc = docSnap.data() as NuevoMiembro;
+      const data: ObjectWithReference<NuevoMiembro> = {
+        id: ref,
+        objeto: datosDoc
+      }
+      // Agregar el objeto a la lista de objetos mostrables
+      objetoPpal.objetosMostrables.push(data);
+    }
+
+
+    console.log("objectppal data mostrable", objetoPpal.objetosMostrables);
+
+    return objetoPpal;
   }
 
 }

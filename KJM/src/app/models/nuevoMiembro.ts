@@ -1,13 +1,17 @@
-export default interface NuevoMiembro {
-    numeroDocumento:string,
-    
-    nombre: string,
-    telefono: string,
-    fechaNacimiento: string,
-    genero: string,
+import firebase from 'firebase/compat';
 
-    barrio: string,
-    direccion: string,
-    correo: string,
-    redPerteneciente: string
+export default interface NuevoMiembro {
+    
+    nombre: string, // Obligatorio
+    telefono: string, // Obligatorio
+    fechaNacimiento: string, // Obligatorio
+    genero: string, // Obligatorio
+    quienLoInvito: string; // Obligatorio
+
+    barrio: string, // Obligatorio
+    direccion: string, // Opcional
+    correo: string, // Opcional
+    redPerteneciente: string // Opcional
+
+    historialAfirmacion: firebase.firestore.DocumentReference[]
 }

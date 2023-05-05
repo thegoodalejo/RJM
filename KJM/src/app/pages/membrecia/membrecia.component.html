@@ -1,18 +1,10 @@
 <div class="container-membrecia">
-    <mat-label>¿Persona autorizo compartir su informacion?</mat-label>
+    <mat-label>¿Autoriza usted el tratamiento de uso de sus datos personales?</mat-label>
     <mat-slide-toggle [(ngModel)]="autorizaCompartirInfo" [checked]="autorizaCompartirInfo">
         {{autorizaCompartirInfo ? 'Sí' : 'No' }}
     </mat-slide-toggle>
-
-    <mat-form-field class="container-membrecia" appearance="fill" *ngIf="autorizaCompartirInfo">
-        <mat-label>Nuemero de Identificacion</mat-label>
-        <input matInput [(ngModel)]="numeroDocumento" >
-        <mat-error>
-            This field is required
-        </mat-error>
-    </mat-form-field>
 </div>
-<mat-vertical-stepper class="container-membrecia" *ngIf="autorizaCompartirInfo && numeroDocumento.length > 5">
+<mat-vertical-stepper class="container-membrecia" *ngIf="autorizaCompartirInfo">
     <mat-step>
         <ng-template matStepLabel>Info Basica</ng-template>
         <mat-form-field class="container-membrecia" appearance="fill">
@@ -38,6 +30,12 @@
                 <mat-option value="Mujer">Mujer</mat-option>
             </mat-select>
         </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>¿Como llegó / Quien lo invito?</mat-label>
+            <input matInput [(ngModel)]="quienLoInvito">
+        </mat-form-field>
+
         <button mat-button matStepperNext>Siguiente</button>
     </mat-step>
     <mat-step>
