@@ -54,7 +54,9 @@ export class MembreciaComponent {
       correo: this.correo,
       redPerteneciente: this.redPerteneciente,
 
-      historialAfirmacion : []
+      historialAfirmacion : [],
+      registroDate: Date.now()
+      
     }
 
     this._firestoreService.crearNuevoMiembro(data);

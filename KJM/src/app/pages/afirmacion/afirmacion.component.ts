@@ -12,6 +12,16 @@ import NuevoMiembro from 'src/app/models/nuevoMiembro';
 import AfirmacionReporte from 'src/app/models/afirmacionReporte';
 import firebase from 'firebase/compat';
 import ObjectWithReference from 'src/app/models/objectWithReferenc';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
+export interface Reporte {
+  fecha: string;
+  nombre: string;
+  constesta: boolean;
+  afirmador: string;
+}
 
 @Component({
   selector: 'app-afirmacion',
@@ -28,6 +38,13 @@ export class AfirmacionComponent {
 
   //para el dropdown
   personas: ObjectWithReference<NuevoMiembro>[] = [];
+  //para el grid
+  reportes: ObjectWithReference<AfirmacionReporte>[] = [];
+  displayedColumns: string[] = ['fecha', 'afirmador'];
+  dataSource: Reporte[] = [];
+
+
+  //
   telPersonaAfirmada: any;
   selectedOption!: string;
 
@@ -59,7 +76,8 @@ export class AfirmacionComponent {
     private route: ActivatedRoute,
     private fireService: FirestoreService,
     private fireAuth: AuthService,
-    private home: HomeComponent) {
+    private home: HomeComponent,
+    private _snackBar: MatSnackBar,) {
 
     this.fireAuth.isAuth().pipe(
       map((user) => {
@@ -76,10 +94,12 @@ export class AfirmacionComponent {
       () => {
         this.fireService.listaPersonasAfirmacion(this.fireAuth.user?.uid).then(obj => {
           this.personas = obj.objetosMostrables;
+
         });
       }
     );
   }
+
 
 
   onSelectionChange() {
@@ -88,14 +108,39 @@ export class AfirmacionComponent {
     console.log(`La opción seleccionada es: ${opcionSeleccionada}`);
     const contactoEncontrado = this.personas.find((contacto) => contacto.objeto.nombre === opcionSeleccionada);
     console.log(`Telefono de la opción seleccionada es: ${contactoEncontrado?.objeto.telefono}`);
-    if(contactoEncontrado){
+    if (contactoEncontrado) {
       this.personaRef = contactoEncontrado.id;
+      console.log("Antes de llamar el servicio, Data => ", contactoEncontrado.id.id);
+      this.fireService.listaReportesAfirmacion(contactoEncontrado.id.id).then(obj => {
+        this.reportes = obj.objetosMostrables;
+        const dataSource2: Reporte[] = [];
+        obj.objetosMostrables.forEach(rep => {
+          const fecha = new Date(rep.objeto.fechaReporte);
+          console.log(rep.objeto.fechaReporte);
+          const dia = fecha.getDate().toString().padStart(2, "0"); // Se obtiene el día y se rellena con cero a la izquierda si es necesario
+          const mes = (fecha.getMonth() + 1).toString().padStart(2, "0"); // Se obtiene el mes y se rellena con cero a la izquierda si es necesario (se suma 1 porque los meses en JavaScript comienzan en 0)
+          const anio = fecha.getFullYear().toString(); // Se obtiene el año
+          const fechaString = `${dia}/${mes}/${anio}`; // Se concatena la fecha en el formato deseado
+          console.log(fechaString); // "09/05/2023"
+          const report: Reporte = {
+            fecha: fechaString,
+            nombre: contactoEncontrado.objeto.nombre,
+            constesta: rep.objeto.personaContesta,
+            afirmador: rep.objeto.afirmador
+          }
+          dataSource2.push(report);
+          console.log("Creado =>", report)
+          this.dataSource = dataSource2;
+        });
+      });
       this.telPersonaAfirmada = contactoEncontrado.objeto.telefono;
     }
   }
 
   enviarReporte() {
+
     const data: AfirmacionReporte = {
+      registroDate: this.fireService.getTimeStamp(),
       //Info
       personaRef: this.personaRef,
       afirmador: this.user.displayName,
@@ -120,10 +165,46 @@ export class AfirmacionComponent {
       reporteOracion: this.reporteOracion,
       reporteGeneral: this.reporteGeneral
     }
-
+    if (!this.fechaReporte) {
+      this._snackBar.open('Fecha invalida', 'Cerrar',
+        {
+          duration: 3000
+        }
+      );
+      return;
+    }
+    if (!this.selectedOption) {
+      this._snackBar.open('Seleccione Persona', 'Cerrar',
+        {
+          duration: 3000
+        }
+      );
+      return;
+    }
     this.fireService.createNewAfirmacionRecord(data);
+    this.fechaReporte = '';
+    this.selectedOption = '';
+
+    this.personaContesta = false;
+
+    //novedades
+    this.personaNoContesta = false;
+    this.noContestaSeDejaMensaje = false;
+    this.personaNumeroIncorrecto = false;
+    this.personaFueraDeLaCiudad = false;
+    this.personaOtraIglesia = false;
+
+    //si contesta, entonces
+    this.personaInteresada = false;
+    this.personaAsistira = false;
+    this.personaPideOracion = false;
+
+    //para el step 3
+    this.reporteOracion = '';
+    this.reporteGeneral = '';
+
+    this.dataSource = [];
 
   }
-
-
+  
 }

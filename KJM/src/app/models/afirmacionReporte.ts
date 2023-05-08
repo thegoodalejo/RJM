@@ -23,4 +23,6 @@ export default interface AfirmacionReporte {
     //para el step 3
     reporteOracion: string;
     reporteGeneral: string;
+
+    registroDate: any;
 }

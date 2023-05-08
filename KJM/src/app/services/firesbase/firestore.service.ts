@@ -16,6 +16,7 @@ import ObjectWithReference from 'src/app/models/objectWithReferenc';
 
 
 import firebase from 'firebase/compat/app';
+import DetalleReportesAfirmacionMiembro from 'src/app/models/detalleReportesAfirmacionMiembro';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class FirestoreService {
     private _firestore: AngularFirestore,
     private _snackBar: MatSnackBar,
   ) { }
+
+  getTimeStamp(){
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
 
   async createNewUser(user: any) {
     console.log("Creando usuario ?????????", user.uid);
@@ -170,6 +175,42 @@ export class FirestoreService {
 
 
     console.log("objectppal data mostrable", objetoPpal.objetosMostrables);
+
+    return objetoPpal;
+  }
+
+  async listaReportesAfirmacion(uid: any): Promise<DetalleReportesAfirmacionMiembro> {
+
+    const objetoPpal: DetalleReportesAfirmacionMiembro = {
+      listaDeReportes: [],
+      objetosMostrables: []
+    };
+
+    console.log('Servicio: Retornar reportes de afirmacion x miembro',uid);
+
+    const docRef = doc(this._firestore.firestore, "miembros", uid);
+    console.log("Referencia",docRef);
+    const docSnap = await getDoc(docRef) as any;
+    console.log("Initial Data", docSnap.data());
+
+    objetoPpal.listaDeReportes = docSnap.data().historialAfirmacion;
+
+    console.log("Initial Data", docSnap.data());
+    console.log(objetoPpal.listaDeReportes);
+
+    for (const ref of objetoPpal.listaDeReportes) {
+      const docSnap = await getDoc(ref);
+      const datosDoc = docSnap.data() as AfirmacionReporte;
+      const data: ObjectWithReference<AfirmacionReporte> = {
+        id: ref,
+        objeto: datosDoc
+      }
+      // Agregar el objeto a la lista de objetos mostrables
+      objetoPpal.objetosMostrables.push(data);
+    }
+
+
+    console.log("objectppal data mostrable afirmacion x Miembro", objetoPpal.objetosMostrables);
 
     return objetoPpal;
   }

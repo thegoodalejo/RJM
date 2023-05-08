@@ -25,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -38,6 +39,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
+import { DatePipe } from '@angular/common';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -99,8 +101,9 @@ const app = initializeApp(firebaseConfig);
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTableModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
