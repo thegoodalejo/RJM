@@ -40,6 +40,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { DatePipe } from '@angular/common';
+import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -73,7 +74,8 @@ const app = initializeApp(firebaseConfig);
     NotFoundComponent,
     NavBarComponent,
     InicioComponent,
-    MembreciaComponent
+    MembreciaComponent,
+    RegistroMiembroComponent
 
   ],
   imports: [

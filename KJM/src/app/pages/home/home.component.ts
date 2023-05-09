@@ -2,6 +2,8 @@ import { Component, } from '@angular/core';
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
+import UserDb from 'src/app/models/userDb';
 
 @Component({
   selector: 'app-home',
@@ -12,11 +14,15 @@ export class HomeComponent {
 
   user: any;
   userImageURL: any = '';
+  userDbInfo: any;
+  isDeptoLider: boolean = false;
+  isAfirmador: boolean = false;
 
 
   constructor(
     public fireAuth: AuthService,
-    private router: Router
+    private router: Router,
+    private _firestore: FirestoreService
   ) {
     this.fireAuth.isAuth().pipe(
       map((user) => {
@@ -24,7 +30,24 @@ export class HomeComponent {
           // Si el usuario está autenticado, almacena su información en la variable user
           this.user = user;
           this.userImageURL = user.photoURL;
-          console.log("ojo aca si tengo la info del usuario " + user.displayName);
+          
+          this._firestore.getUserDbInfo(user.uid).then(
+            (response => {
+              
+              this.userDbInfo = response as UserDb;
+              console.log("User basic info", this.userDbInfo);
+              if (this.userDbInfo.rol.includes('LiderDpto')) {
+                this.isDeptoLider = true;
+              } 
+              if (this.userDbInfo.rol.includes('Afirmador')) {
+                this.isAfirmador = true;
+              } 
+            })
+          ).catch(error => console.log('Error al consultar usuario', error));
+
+          
+
+          
         } else {
           // Si el usuario no está autenticado, establece la variable user en null
           this.user = null;
@@ -34,3 +57,4 @@ export class HomeComponent {
   }
 
 }
+

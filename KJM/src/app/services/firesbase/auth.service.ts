@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat';
 import { firstValueFrom, from } from 'rxjs';
 import { FirestoreService } from './firestore.service';
-import User from 'src/app/models/user';
+import User from 'src/app/models/userDb';
 import { Router } from '@angular/router';
 
 @Injectable({

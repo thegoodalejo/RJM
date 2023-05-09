@@ -8,6 +8,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,7 @@ const routes: Routes = [
     children: [
       { path: 'app-inicio', component: InicioComponent},
       { path: 'app-afirmacion', component: AfirmacionComponent},
-      { path: 'app-membrecia', component: MembreciaComponent},
+      { path: 'registro-miembro', component: RegistroMiembroComponent},
     ]
   },
   { path: 'app-login', component: LoginComponent },

@@ -17,6 +17,7 @@ import ObjectWithReference from 'src/app/models/objectWithReferenc';
 
 import firebase from 'firebase/compat/app';
 import DetalleReportesAfirmacionMiembro from 'src/app/models/detalleReportesAfirmacionMiembro';
+import UserDb from 'src/app/models/userDb';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,16 @@ export class FirestoreService {
     private _snackBar: MatSnackBar,
   ) { }
 
-  getTimeStamp(){
+  getTimeStamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
+  async getUserDbInfo(uid: any) {
+    const docRef = doc(this._firestore.firestore, "usuarios", uid);
+    const docSnap = await getDoc(docRef) as any;
+
+    console.log("Document data:", docSnap.data());
+    return docSnap.data() as UserDb;
   }
 
   async createNewUser(user: any) {
@@ -44,10 +53,13 @@ export class FirestoreService {
 
     if (!userDoc.exists) {
       console.log("actualmente usuario no existe");
-      const data = {
+      const data: UserDb = {
         nombre: user.displayName,
         email: user.email,
-        rol: ["Nuevo"]
+        rol: ["Nuevo"],
+        ministerio: '',
+        ubicacion: '',
+        posicion: ''
       };
 
       await userRef.set(data)
@@ -186,10 +198,10 @@ export class FirestoreService {
       objetosMostrables: []
     };
 
-    console.log('Servicio: Retornar reportes de afirmacion x miembro',uid);
+    console.log('Servicio: Retornar reportes de afirmacion x miembro', uid);
 
     const docRef = doc(this._firestore.firestore, "miembros", uid);
-    console.log("Referencia",docRef);
+    console.log("Referencia", docRef);
     const docSnap = await getDoc(docRef) as any;
     console.log("Initial Data", docSnap.data());
 

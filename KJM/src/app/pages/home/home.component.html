@@ -27,12 +27,16 @@
 					<mat-icon>home</mat-icon>
 					<span>Home</span>
 				</button>
-				<button mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion', user]">
+				<button *ngIf="isAfirmador" mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion', user]">
 					<mat-icon>call</mat-icon>
 					<span>Afirmacion</span>
 				</button>
-				<button mat-button class="menu-button" [routerLink]="['/app-home/app-membrecia']">
-					<mat-icon>person</mat-icon>
+				<button mat-button class="menu-button" [routerLink]="['/app-home/registro-miembro']">
+					<mat-icon>add_circle</mat-icon>
+					<span>Nuevo Miembro</span>
+				</button>
+				<button *ngIf="isDeptoLider" mat-button class="menu-button" [routerLink]="['/app-home/app-membrecia']">
+					<mat-icon>supervisor_account</mat-icon>
 					<span>Membrecia</span>
 				</button>
 

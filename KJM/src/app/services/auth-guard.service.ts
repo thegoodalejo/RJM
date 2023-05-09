@@ -19,6 +19,7 @@ export class AuthGuardService {
       map((user) => {
         if (user) {
           // Si el usuario está autenticado, permite el acceso
+          console.log("User autentikado ?");
           return true;
         } else {
           // Si el usuario no está autenticado, redirige al usuario a la página de inicio de sesión
