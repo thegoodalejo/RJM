@@ -23,6 +23,7 @@ import UserDb from 'src/app/models/userDb';
   providedIn: 'root'
 })
 export class FirestoreService {
+  
 
   constructor(
     private _firestore: AngularFirestore,
@@ -31,6 +32,12 @@ export class FirestoreService {
 
   getTimeStamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
+  async getMembreciaList() {
+    const colRef = collection(this._firestore.firestore,"miembros");
+    const docSnap = await getDocs(colRef);
+  return docSnap;
   }
 
   async getUserDbInfo(uid: any) {

@@ -3,6 +3,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import NuevoMiembro from 'src/app/models/nuevoMiembro';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Reporte } from '../afirmacion/afirmacion.component';
+import ObjectWithReference from 'src/app/models/objectWithReferenc';
+import { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore';
+
+export interface TestDocs{
+  nombre: string,
+  telefono: string
+}
 
 @Component({
   selector: 'app-membrecia',
@@ -11,70 +19,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class MembreciaComponent {
 
-  //step 1
-  autorizaCompartirInfo: boolean = false;
-
-  //step 2
-  nombre: string = '';
-  telefono: string = '';
-  fechaNacimiento: string = '';
-  genero: string = '';
-  quienLoInvito: string = '';
-
-  barrio: string = '';
-  direccion: string = '';
-  correo: string = '';
-  redPerteneciente: string = '';
-
-  myFormStep1: FormGroup;
+  displayedColumns: string[] = ['nombre', 'telefono'];
+  dataSource: TestDocs[] = [{ nombre: "a", telefono: "b"}];
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _firestoreService: FirestoreService,
-    private fb: FormBuilder
+    private _firestore: FirestoreService
   ) {
-    this.myFormStep1 = this.fb.group({
-      formNumeroDocumento: ['', Validators.required]
-    });
+    const dataSource2: TestDocs[] = [];
+    this._firestore.getMembreciaList().then(
+      ((result: QuerySnapshot<DocumentData>) => {
+        this.dataSource = result.docs.map((doc) => {
+          return { nombre: doc.data()['nombre'], telefono: doc.data()['telefono'] };
+        });
+        
+      })
+    );
+    this.dataSource = dataSource2;
   }
-
-
-
-  crearMiembro() {
-    const data: NuevoMiembro = {
-
-      nombre: this.nombre,
-      telefono: this.telefono,
-      fechaNacimiento: this.fechaNacimiento,
-      genero: this.genero,
-      quienLoInvito: this.quienLoInvito,
-
-      barrio: this.barrio,
-      direccion: this.direccion,
-      correo: this.correo,
-      redPerteneciente: this.redPerteneciente,
-
-      historialAfirmacion : [],
-      registroDate: Date.now()
-      
-    }
-
-    this._firestoreService.crearNuevoMiembro(data);
-
-    this.autorizaCompartirInfo = false;
-
-    //step 2
-    this.nombre = '';
-    this.telefono = '';
-    this.fechaNacimiento = '';
-    this.genero = '';
-    this.quienLoInvito = '';
-
-    this.barrio = '';
-    this.direccion = '';
-    this.correo = '';
-    this.redPerteneciente = '';
-
-  }
-
 }

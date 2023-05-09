@@ -20,6 +20,7 @@ const routes: Routes = [
       { path: 'app-inicio', component: InicioComponent},
       { path: 'app-afirmacion', component: AfirmacionComponent},
       { path: 'registro-miembro', component: RegistroMiembroComponent},
+      { path: 'app-membrecia', component: MembreciaComponent},
     ]
   },
   { path: 'app-login', component: LoginComponent },
