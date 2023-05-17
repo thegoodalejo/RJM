@@ -1,15 +1,15 @@
+<!--
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
+          The actual rendered columns are set as a property on the row definition" 
   
-    <!-- Position Column -->
+
     <ng-container matColumnDef="nombre">
       <th mat-header-cell *matHeaderCellDef> Nombre </th>
       <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
     </ng-container>
   
-    <!-- Symbol Column -->
+
     <ng-container matColumnDef="telefono">
       <th mat-header-cell *matHeaderCellDef> Telefono </th>
       <td mat-cell *matCellDef="let element"> {{element.telefono}} </td>
@@ -18,3 +18,24 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+-->
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let persona"> {{persona.nombre}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="telefono">
+    <th mat-header-cell *matHeaderCellDef> Telefono </th>
+    <td mat-cell *matCellDef="let persona"> {{persona.telefono}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fecha">
+    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+    <td mat-cell *matCellDef="let persona"> {{persona.fecha | date:'dd/MM/yyyy'}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['nombre', 'telefono', 'fecha']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['nombre', 'telefono', 'fecha']" (click)="mostrarTelefono(row)"></tr>
+</table>

@@ -40,6 +40,12 @@ export class FirestoreService {
   return docSnap;
   }
 
+  async getAfirmacionReportSingle(uid:any) {
+    const colRef = collection(this._firestore.firestore,"miembros");
+    const docSnap = await getDocs(colRef);
+  return docSnap;
+  }
+
   async getUserDbInfo(uid: any) {
     const docRef = doc(this._firestore.firestore, "usuarios", uid);
     const docSnap = await getDoc(docRef) as any;

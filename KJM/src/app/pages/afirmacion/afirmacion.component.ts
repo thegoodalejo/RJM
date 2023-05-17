@@ -15,9 +15,10 @@ import ObjectWithReference from 'src/app/models/objectWithReferenc';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 export interface Reporte {
-  fecha: string;
+  fecha: any;
   nombre: string;
   constesta: boolean;
   afirmador: string;
@@ -74,7 +75,7 @@ export class AfirmacionComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private fireService: FirestoreService,
+    private _firestore: FirestoreService,
     private fireAuth: AuthService,
     private home: HomeComponent,
     private _snackBar: MatSnackBar,) {
@@ -92,12 +93,15 @@ export class AfirmacionComponent {
       })
     ).subscribe(
       () => {
-        this.fireService.listaPersonasAfirmacion(this.fireAuth.user?.uid).then(obj => {
+        this._firestore.listaPersonasAfirmacion(this.fireAuth.user?.uid).then(obj => {
           this.personas = obj.objetosMostrables;
 
         });
       }
     );
+
+    this.fechaReporte = Date.now();
+    console.log("this.fechaReporte",this.fechaReporte);
   }
 
 
@@ -111,19 +115,13 @@ export class AfirmacionComponent {
     if (contactoEncontrado) {
       this.personaRef = contactoEncontrado.id;
       console.log("Antes de llamar el servicio, Data => ", contactoEncontrado.id.id);
-      this.fireService.listaReportesAfirmacion(contactoEncontrado.id.id).then(obj => {
+      this._firestore.listaReportesAfirmacion(contactoEncontrado.id.id).then(obj => {
         this.reportes = obj.objetosMostrables;
         const dataSource2: Reporte[] = [];
         obj.objetosMostrables.forEach(rep => {
-          const fecha = new Date(rep.objeto.fechaReporte);
-          console.log(rep.objeto.fechaReporte);
-          const dia = fecha.getDate().toString().padStart(2, "0"); // Se obtiene el día y se rellena con cero a la izquierda si es necesario
-          const mes = (fecha.getMonth() + 1).toString().padStart(2, "0"); // Se obtiene el mes y se rellena con cero a la izquierda si es necesario (se suma 1 porque los meses en JavaScript comienzan en 0)
-          const anio = fecha.getFullYear().toString(); // Se obtiene el año
-          const fechaString = `${dia}/${mes}/${anio}`; // Se concatena la fecha en el formato deseado
-          console.log(fechaString); // "09/05/2023"
+          console.log("Timestamp obj",rep.objeto.fechaReporte);
           const report: Reporte = {
-            fecha: fechaString,
+            fecha:  rep.objeto.fechaReporte,
             nombre: contactoEncontrado.objeto.nombre,
             constesta: rep.objeto.personaContesta,
             afirmador: rep.objeto.afirmador
@@ -134,18 +132,21 @@ export class AfirmacionComponent {
         });
       });
       this.telPersonaAfirmada = contactoEncontrado.objeto.telefono;
+      const datePickerLocal = this.fechaReporte as Date;
+      console.log("this.fechaReporte ======>",datePickerLocal.getTime());
     }
   }
 
   enviarReporte() {
 
+    const datePickerLocal = this.fechaReporte as Date;
     const data: AfirmacionReporte = {
-      registroDate: this.fireService.getTimeStamp(),
+      registroDate: Date.now(),
       //Info
       personaRef: this.personaRef,
       afirmador: this.user.displayName,
       afirmadorID: this.user.uid,
-      fechaReporte: this.fechaReporte,
+      fechaReporte: datePickerLocal.getTime(),
 
       personaContesta: this.personaContesta,
 
@@ -181,8 +182,8 @@ export class AfirmacionComponent {
       );
       return;
     }
-    this.fireService.createNewAfirmacionRecord(data);
-    this.fechaReporte = '';
+    this._firestore.createNewAfirmacionRecord(data);
+    this.fechaReporte = Date.now();
     this.selectedOption = '';
 
     this.personaContesta = false;
@@ -206,5 +207,9 @@ export class AfirmacionComponent {
     this.dataSource = [];
 
   }
-  
+
+  rowInfo(row: any) {
+    console.log(row);
+  }
+
 }
