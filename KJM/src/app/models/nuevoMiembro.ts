@@ -4,7 +4,7 @@ export default interface NuevoMiembro {
     
     nombre: string; // Obligatorio
     telefono: string; // Obligatorio
-    fechaNacimiento: string // Obligatorio
+    fechaNacimiento: any // Obligatorio
     genero: string; // Obligatorio
     quienLoInvito: string; // Obligatorio
 

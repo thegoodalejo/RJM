@@ -14,14 +14,14 @@ import firebase from 'firebase/compat';
 import ObjectWithReference from 'src/app/models/objectWithReferenc';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Timestamp } from 'firebase/firestore';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DetalleReporteAfirmacionComponent } from 'src/app/PopupModals/detalle-reporte-afirmacion/detalle-reporte-afirmacion.component';
 
 export interface Reporte {
   fecha: any;
-  nombre: string;
   constesta: boolean;
   afirmador: string;
+  id: firebase.firestore.DocumentReference;
 }
 
 @Component({
@@ -78,7 +78,8 @@ export class AfirmacionComponent {
     private _firestore: FirestoreService,
     private fireAuth: AuthService,
     private home: HomeComponent,
-    private _snackBar: MatSnackBar,) {
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) {
 
     this.fireAuth.isAuth().pipe(
       map((user) => {
@@ -122,14 +123,16 @@ export class AfirmacionComponent {
           console.log("Timestamp obj",rep.objeto.fechaReporte);
           const report: Reporte = {
             fecha:  rep.objeto.fechaReporte,
-            nombre: contactoEncontrado.objeto.nombre,
             constesta: rep.objeto.personaContesta,
-            afirmador: rep.objeto.afirmador
+            afirmador: rep.objeto.afirmador,
+            id: rep.id
           }
           dataSource2.push(report);
           console.log("Creado =>", report)
-          this.dataSource = dataSource2;
+          console.log("Ref =>", report.id.path)
+          
         });
+        this.dataSource = dataSource2;
       });
       this.telPersonaAfirmada = contactoEncontrado.objeto.telefono;
       const datePickerLocal = this.fechaReporte as Date;
@@ -209,7 +212,15 @@ export class AfirmacionComponent {
   }
 
   rowInfo(row: any) {
-    console.log(row);
+    console.log("Row darta",row);
+    const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.disableClose = true;
+        dialogConfig.autoFocus = true;
+
+        dialogConfig.data = row
+
+        this.dialog.open(DetalleReporteAfirmacionComponent, dialogConfig);
   }
 
 }

@@ -23,27 +23,47 @@ import UserDb from 'src/app/models/userDb';
   providedIn: 'root'
 })
 export class FirestoreService {
-  
 
   constructor(
     private _firestore: AngularFirestore,
     private _snackBar: MatSnackBar,
   ) { }
 
+  async getDocFromRef(docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
+    const docSnap = await getDoc(docRef);
+    return docSnap;
+  }
+
+  async getDocumentsFromCollection() {
+    try {
+      const colRef = collection(this._firestore.firestore, "miembros");
+      const querySnapshot = await getDocs(collection(this._firestore.firestore, 'miembros'));
+      return querySnapshot;
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      return [];
+    }
+  }
+
   getTimeStamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
   }
 
   async getMembreciaList() {
-    const colRef = collection(this._firestore.firestore,"miembros");
+    try {
+
+    } catch (error) {
+
+    }
+    const colRef = collection(this._firestore.firestore, "miembros");
     const docSnap = await getDocs(colRef);
-  return docSnap;
+    return docSnap;
   }
 
-  async getAfirmacionReportSingle(uid:any) {
-    const colRef = collection(this._firestore.firestore,"miembros");
+  async getAfirmacionReportSingle(uid: any) {
+    const colRef = collection(this._firestore.firestore, "miembros");
     const docSnap = await getDocs(colRef);
-  return docSnap;
+    return docSnap;
   }
 
   async getUserDbInfo(uid: any) {

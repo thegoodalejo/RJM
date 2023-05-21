@@ -1,0 +1,30 @@
+<h1>Reporte de Afirmacion</h1>
+
+<h4>Fecha de reporte {{modalInfo.data().fechaReporte | date:'dd/MM/yyyy'}}</h4>
+<h4>Quien lo afirmo? {{modalInfo.data().afirmador}}</h4>
+<h4>¿Contesto? {{modalInfo.data().personaContesta ? 'Sí' : 'No'}}</h4>
+<div *ngIf="!modalInfo.data().personaContesta">
+    <h4 *ngIf="modalInfo.data().personaNumeroIncorrecto">Numero incorrecto</h4>
+    <h4 *ngIf="modalInfo.data().noContestaSeDejaMensaje">Se envia buzon de Voz o Mensaje WhatsApp</h4>
+</div>
+
+<div *ngIf="modalInfo.data().personaContesta">
+    <h4>¿La persona esta interesada? {{modalInfo.data().personaInteresada ? 'Sí' : 'No'}}</h4>
+    <div *ngIf="modalInfo.data().personaInteresada">
+        <h4 *ngIf="modalInfo.data().personaAsistira">Quiere asistir</h4>
+        <h4 *ngIf="modalInfo.data().personaPideOracion">Oré por la persona</h4>
+    </div>
+    <h4 *ngIf="!modalInfo.data().personaInteresada">Se congrega en otra Iglesia</h4>
+    <h4 *ngIf="modalInfo.data().personaFueraDeLaCiudad">Fuera de la ciudad</h4>
+</div>
+
+<div *ngIf="modalInfo.data().personaInteresada">
+    <h2>Reporte General</h2>
+    <h5>{{modalInfo.data().reporteGeneral}}</h5>
+</div>
+<div *ngIf="modalInfo.data().personaPideOracion">
+    <h2>Reporte Oracion</h2>
+    <h5>{{modalInfo.data().reporteOracion}}</h5>
+</div>
+
+<button mat-button [mat-dialog-close]="true">Cerrar</button>

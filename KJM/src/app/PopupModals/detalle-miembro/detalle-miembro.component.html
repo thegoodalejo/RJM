@@ -1,0 +1,70 @@
+<p>{{modalInfo.data().nombre}}</p>
+
+
+<mat-vertical-stepper class="container-membrecia">
+    <mat-step>
+        <ng-template matStepLabel>Info Basica</ng-template>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Nombre completo</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().nombre">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Telefono</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().telefono">
+        </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Fecha nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" [value]="convertTimestampToDate(modalInfo.data().fechaNacimiento)" readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Genero</mat-label>
+            <mat-select [(ngModel)]="modalInfo.data().genero">
+                <mat-option value="Hombre">Hombre</mat-option>
+                <mat-option value="Mujer">Mujer</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>¿Como llegó / Quien lo invito?</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().quienLoInvito">
+        </mat-form-field>
+
+        <button mat-button matStepperNext>Siguiente</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Ubicacion y Correo</ng-template>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Barrio</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().barrio">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Direccion</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().direccion">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Correo electronico</mat-label>
+            <input matInput [(ngModel)]="modalInfo.data().correo">
+        </mat-form-field>
+        <mat-form-field class="container-membrecia" appearance="fill">
+            <mat-label>Red a Asignar</mat-label>
+            <mat-select [(ngModel)]="modalInfo.data().redPerteneciente">
+                <mat-option value="NISSI">NISSI</mat-option>
+                <mat-option value="ELYON">ELYON</mat-option>
+                <mat-option value="YAHWEH">YAHWEH</mat-option>
+                <mat-option value="YESHUA">YESHUA</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Finalizar</ng-template>
+        <button class="button-submit" mat-button color="primary" (click)="actualizarMiembro()">Actualizar</button>
+    </mat-step>
+</mat-vertical-stepper>
+
+<button mat-button [mat-dialog-close]="true">Cerrar</button>

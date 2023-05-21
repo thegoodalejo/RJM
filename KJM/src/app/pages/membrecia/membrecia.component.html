@@ -37,5 +37,5 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="['nombre', 'telefono', 'fecha']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['nombre', 'telefono', 'fecha']" (click)="mostrarTelefono(row)"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['nombre', 'telefono', 'fecha']" (click)="rowInfo(row)"></tr>
 </table>

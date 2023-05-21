@@ -16,7 +16,7 @@ export class RegistroMiembroComponent {
   //step 2
   nombre: string = '';
   telefono: string = '';
-  fechaNacimiento: string = '';
+  fechaNacimiento: any = '';
   genero: string = '';
   quienLoInvito: string = '';
 
@@ -40,11 +40,12 @@ export class RegistroMiembroComponent {
 
 
   crearMiembro() {
+    const datePickerLocal = this.fechaNacimiento as Date;
     const data: NuevoMiembro = {
 
       nombre: this.nombre,
       telefono: this.telefono,
-      fechaNacimiento: this.fechaNacimiento,
+      fechaNacimiento: datePickerLocal.getTime(),
       genero: this.genero,
       quienLoInvito: this.quienLoInvito,
 

@@ -26,6 +26,7 @@ import { MatSliderModule } from '@angular/material/slider'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -41,6 +42,8 @@ import { InicioComponent } from './components/inicio/inicio.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { DatePipe } from '@angular/common';
 import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
+import { DetalleReporteAfirmacionComponent } from './PopupModals/detalle-reporte-afirmacion/detalle-reporte-afirmacion.component';
+import { DetalleMiembroComponent } from './PopupModals/detalle-miembro/detalle-miembro.component';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -75,7 +78,9 @@ const app = initializeApp(firebaseConfig);
     NavBarComponent,
     InicioComponent,
     MembreciaComponent,
-    RegistroMiembroComponent
+    RegistroMiembroComponent,
+    DetalleReporteAfirmacionComponent,
+    DetalleMiembroComponent
 
   ],
   imports: [
@@ -104,8 +109,9 @@ const app = initializeApp(firebaseConfig);
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTableModule,
+    MatDialogModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
