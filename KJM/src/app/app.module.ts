@@ -44,6 +44,8 @@ import { DatePipe } from '@angular/common';
 import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
 import { DetalleReporteAfirmacionComponent } from './PopupModals/detalle-reporte-afirmacion/detalle-reporte-afirmacion.component';
 import { DetalleMiembroComponent } from './PopupModals/detalle-miembro/detalle-miembro.component';
+import { GobiernoComponent } from './pages/gobierno/gobierno.component';
+import { DetalleUsuarioComponent } from './PopupModals/detalle-usuario/detalle-usuario.component';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -80,7 +82,9 @@ const app = initializeApp(firebaseConfig);
     MembreciaComponent,
     RegistroMiembroComponent,
     DetalleReporteAfirmacionComponent,
-    DetalleMiembroComponent
+    DetalleMiembroComponent,
+    GobiernoComponent,
+    DetalleUsuarioComponent
 
   ],
   imports: [

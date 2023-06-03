@@ -9,6 +9,7 @@ import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
+import { GobiernoComponent } from './pages/gobierno/gobierno.component';
 
 
 const routes: Routes = [
@@ -17,10 +18,11 @@ const routes: Routes = [
     path: 'app-home', component: HomeComponent,
     canActivate: [AuthGuardService],
     children: [
-      { path: 'app-inicio', component: InicioComponent},
-      { path: 'app-afirmacion', component: AfirmacionComponent},
-      { path: 'registro-miembro', component: RegistroMiembroComponent},
-      { path: 'app-membrecia', component: MembreciaComponent},
+      { path: 'app-inicio', component: InicioComponent  },
+      { path: 'app-afirmacion', component: AfirmacionComponent },
+      { path: 'registro-miembro', component: RegistroMiembroComponent },
+      { path: 'app-membrecia', component: MembreciaComponent },
+      { path: 'app-gobierno', component: GobiernoComponent },
     ]
   },
   { path: 'app-login', component: LoginComponent },

@@ -60,6 +60,17 @@ export class FirestoreService {
     return docSnap;
   }
 
+  async getGobiernoList() {
+    try {
+
+    } catch (error) {
+
+    }
+    const colRef = collection(this._firestore.firestore, "usuarios");
+    const docSnap = await getDocs(colRef);
+    return docSnap;
+  }
+
   async getAfirmacionReportSingle(uid: any) {
     const colRef = collection(this._firestore.firestore, "miembros");
     const docSnap = await getDocs(colRef);
@@ -75,7 +86,8 @@ export class FirestoreService {
   }
 
   async createNewUser(user: any) {
-    console.log("Creando usuario ?????????", user.uid);
+    console.log("createNewUser");
+    console.log("Current UID", user.uid);
     try {
 
     } catch (error) {
@@ -92,7 +104,11 @@ export class FirestoreService {
         rol: ["Nuevo"],
         ministerio: '',
         ubicacion: '',
-        posicion: ''
+        posicion: '',
+        listToCall: [],
+        recordDate: Date.now(),
+        updateDate: Date.now(),
+        updateUser: user.displayName
       };
 
       await userRef.set(data)

@@ -42,9 +42,9 @@
 
 				<mat-divider></mat-divider>
 
-				<button mat-button class="menu-button" (click)="fireAuth.AuthLogOut()">
-					<mat-icon>settings</mat-icon>
-					<span>Settings</span>
+				<button *ngIf="isAdmin" mat-button class="menu-button" [routerLink]="['/app-home/app-gobierno']">
+					<mat-icon>card_membership</mat-icon>
+					<span>Gobierno</span>
 				</button>
 
 				<mat-divider></mat-divider>

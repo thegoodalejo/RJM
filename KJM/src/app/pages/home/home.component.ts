@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
 import UserDb from 'src/app/models/userDb';
+import { AppDataService } from 'src/app/services/app-data.service';
 
 @Component({
   selector: 'app-home',
@@ -13,16 +14,20 @@ import UserDb from 'src/app/models/userDb';
 export class HomeComponent {
 
   user: any;
+
   userImageURL: any = '';
   userDbInfo: any;
+
   isDeptoLider: boolean = false;
   isAfirmador: boolean = false;
+  isAdmin: boolean = false;
 
 
   constructor(
     public fireAuth: AuthService,
     private router: Router,
-    private _firestore: FirestoreService
+    private _firestore: FirestoreService,
+    private _appData: AppDataService
   ) {
     this.fireAuth.isAuth().pipe(
       map((user) => {
@@ -42,12 +47,13 @@ export class HomeComponent {
               if (this.userDbInfo.rol.includes('Afirmador')) {
                 this.isAfirmador = true;
               } 
+              if (this.userDbInfo.rol.includes('Admin')) {
+                this.isAdmin = true;
+              } 
+
+              this._appData.updateUserDb(response);
             })
           ).catch(error => console.log('Error al consultar usuario', error));
-
-          
-
-          
         } else {
           // Si el usuario no está autenticado, establece la variable user en null
           this.user = null;

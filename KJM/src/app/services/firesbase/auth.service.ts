@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  user!: firebase.User;
+  user: any;
 
   constructor(
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
@@ -20,8 +20,8 @@ export class AuthService {
     private router: Router
   ) {
     this.fireAuth.authState.subscribe(user => {
-      if(user)
-      this.user = user
+      if (user)
+        this.user = user
     });
   }
   // Sign in with Google
@@ -31,11 +31,14 @@ export class AuthService {
   // Auth logic to run auth providers
   async AuthLogin(provider: GoogleAuthProvider | firebase.auth.AuthProvider) {
     try {
-      const result = await this.fireAuth
-        .signInWithPopup(provider);
-      console.log('You have been successfully logged in!');
+      await this.fireAuth
+        .signInWithPopup(provider).then(result => {
+          console.log('You have been successfully logged in!', result);
+          console.log('UID', result.user?.uid);
+          this.fireStore.createNewUser(result.user);
+        });
 
-      this.fireStore.createNewUser(this.user?.uid);
+ 
 
     } catch (error) {
       console.log(error);
@@ -51,13 +54,13 @@ export class AuthService {
     return this.fireAuth.authState;
   }
 
- /* getCurrentUserId(){
-    //console.log("dfghjkljhgfdsfghjk" + this.user.user?.uid?.toString());
-    return this.user.user?.uid?.toString();
-  }
-
-  getCurrentUserName(){
-    //console.log("Retornando getCurrentUserName " + this.user.user?.displayName)
-    return  this.user.user?.displayName?.toString();
-  }*/
+  /* getCurrentUserId(){
+     //console.log("dfghjkljhgfdsfghjk" + this.user.user?.uid?.toString());
+     return this.user.user?.uid?.toString();
+   }
+ 
+   getCurrentUserName(){
+     //console.log("Retornando getCurrentUserName " + this.user.user?.displayName)
+     return  this.user.user?.displayName?.toString();
+   }*/
 }

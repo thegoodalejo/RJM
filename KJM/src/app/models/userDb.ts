@@ -1,3 +1,5 @@
+import firebase from 'firebase/compat';
+
 export default interface UserDb {
     nombre: string;
     email: string;
@@ -5,4 +7,8 @@ export default interface UserDb {
     ministerio: string;
     ubicacion: string;
     posicion: string;
+    listToCall: firebase.firestore.DocumentReference[];
+    recordDate: any;
+    updateDate: any;
+    updateUser: any;
 }
