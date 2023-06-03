@@ -8,6 +8,7 @@ import ObjectWithReference from 'src/app/models/objectWithReferenc';
 import NuevoMiembro from 'src/app/models/nuevoMiembro';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, map } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 
 export interface TestDocs {
@@ -24,6 +25,8 @@ export interface TestDocs {
 })
 export class MembreciaComponent implements OnInit {
 
+  filtro:any;
+
   personas: ObjectWithReference<NuevoMiembro>[] = [];
   dataSource: any;
 
@@ -35,6 +38,7 @@ export class MembreciaComponent implements OnInit {
   /***/
   miembrosCollection: AngularFirestoreCollection<NuevoMiembro>;
   miembros$: Observable<NuevoMiembro[]>;
+  miembrosFiltrados$: any;
 
   ngOnInit() {
     this.miembros$ = this.miembrosCollection.snapshotChanges().pipe(
@@ -46,6 +50,7 @@ export class MembreciaComponent implements OnInit {
         })
       )
     );
+    this.miembrosFiltrados$ = this.miembros$;
   }
 
   constructor(
@@ -75,11 +80,16 @@ export class MembreciaComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.dataSource);
   }
 
-  applyFilter(event: Event) {
+  applyFilter() {
 
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.miembrosFiltrados$ = this.miembros$.pipe(
+    map((nuevoMiembros: NuevoMiembro[]) => {
+      // Aplica aquí tu lógica de filtro
+      return nuevoMiembros.filter((nuevoMiembro: NuevoMiembro) => {
+        return nuevoMiembro.nombre.toLowerCase().includes(this.filtro.toLowerCase()) || nuevoMiembro.telefono.includes(this.filtro);
+      });
+    })
+  );
   }
 
   actualizarPersona(persona: NuevoMiembro) {
