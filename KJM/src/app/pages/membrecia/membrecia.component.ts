@@ -11,12 +11,12 @@ import { Observable, map } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 
-export interface TestDocs {
+/*export interface TestDocs {
   nombre: string,
   telefono: string,
   fecha: any,
   docRef: any
-}
+}*/
 
 @Component({
   selector: 'app-membrecia',
@@ -27,16 +27,7 @@ export class MembreciaComponent implements OnInit {
 
   filtro:any;
 
-  personas: ObjectWithReference<NuevoMiembro>[] = [];
-  dataSource: any;
-
-  displayedColumns: string[] = ['nombre', 'telefono'];
-
-  private usuariosCollection: AngularFirestoreCollection<NuevoMiembro>;
-  usuariosDataSource: MatTableDataSource<NuevoMiembro> = new MatTableDataSource<NuevoMiembro>();;
-  usuarios$: Observable<NuevoMiembro[]>;
-  /***/
-  miembrosCollection: AngularFirestoreCollection<NuevoMiembro>;
+  private miembrosCollection: AngularFirestoreCollection<NuevoMiembro>;
   miembros$: Observable<NuevoMiembro[]>;
   miembrosFiltrados$: any;
 
@@ -59,25 +50,10 @@ export class MembreciaComponent implements OnInit {
     private dialog: MatDialog,
     private afs: AngularFirestore
   ) {
-    /***/
+
     this.miembrosCollection = this.afs.collection<NuevoMiembro>('miembros');
     this.miembros$ = this.miembrosCollection.valueChanges();
-    /***/
-    this.usuariosCollection = this.afs.collection<NuevoMiembro>('miembros');
-    this.usuarios$ = this.usuariosCollection.valueChanges();
-    this.usuarios$.subscribe(usuarios => {
-      this.usuariosDataSource = new MatTableDataSource(usuarios);
-    });
-    /***/
-    this._firestore.getMembreciaList().then(
-      ((result: QuerySnapshot<DocumentData>) => {
-        this.dataSource = result.docs.map((doc) => {
-          const member: TestDocs = { nombre: doc.data()['nombre'], telefono: doc.data()['telefono'], fecha: doc.data()['registroDate'], docRef: doc.ref }
-          return member;
-        });
-      })
-    );
-    this.dataSource = new MatTableDataSource(this.dataSource);
+
   }
 
   applyFilter() {

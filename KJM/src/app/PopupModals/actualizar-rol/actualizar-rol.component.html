@@ -1,0 +1,23 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="check">
+    <th mat-header-cell *matHeaderCellDef>Asignado</th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox [(ngModel)]="row.isSelected">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="rol">
+    <th mat-header-cell *matHeaderCellDef>Rol</th>
+    <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['check', 'rol']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['check', 'rol']">
+  </tr>
+</table>
+
+<button class="button-submit" mat-button color="primary" (click)="cerrarDialogo()">Actualizar</button>

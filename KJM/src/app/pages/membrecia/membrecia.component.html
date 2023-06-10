@@ -21,7 +21,7 @@
 -->
 <mat-form-field>
   <mat-label>Filter</mat-label>
-  <input matInput [(ngModel)]="filtro" (keyup)="applyFilter()" placeholder="Ex. ium" #input>
+  <input matInput [(ngModel)]="filtro" (keyup)="applyFilter()" placeholder="Nombre o Telefono" #input>
 </mat-form-field>
 
 <table mat-table [dataSource]="miembrosFiltrados$" class="mat-elevation-z8">

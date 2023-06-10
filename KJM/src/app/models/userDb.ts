@@ -1,6 +1,8 @@
 import firebase from 'firebase/compat';
 
 export default interface UserDb {
+    id?: any;
+    
     nombre: string;
     email: string;
     rol: string[];

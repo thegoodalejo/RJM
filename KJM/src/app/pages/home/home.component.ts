@@ -21,6 +21,7 @@ export class HomeComponent {
   isDeptoLider: boolean = false;
   isAfirmador: boolean = false;
   isAdmin: boolean = false;
+  isMiembro: boolean = false;
 
 
   constructor(
@@ -50,6 +51,9 @@ export class HomeComponent {
               if (this.userDbInfo.rol.includes('Admin')) {
                 this.isAdmin = true;
               } 
+              if (this.userDbInfo.rol.includes('Miembro')) {
+                this.isMiembro = true;
+              } 
 
               this._appData.updateUserDb(response);
             })
@@ -60,6 +64,15 @@ export class HomeComponent {
         }
       })
     ).subscribe();
+  }
+
+  roleCheck(role:string){
+    try {
+      return this.userDbInfo.rol.includes(role);
+    } catch (error) {
+      return false;
+    }
+    
   }
 
 }

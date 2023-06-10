@@ -46,6 +46,7 @@ import { DetalleReporteAfirmacionComponent } from './PopupModals/detalle-reporte
 import { DetalleMiembroComponent } from './PopupModals/detalle-miembro/detalle-miembro.component';
 import { GobiernoComponent } from './pages/gobierno/gobierno.component';
 import { DetalleUsuarioComponent } from './PopupModals/detalle-usuario/detalle-usuario.component';
+import { ActualizarRolComponent } from './PopupModals/actualizar-rol/actualizar-rol.component';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -84,7 +85,8 @@ const app = initializeApp(firebaseConfig);
     DetalleReporteAfirmacionComponent,
     DetalleMiembroComponent,
     GobiernoComponent,
-    DetalleUsuarioComponent
+    DetalleUsuarioComponent,
+    ActualizarRolComponent
 
   ],
   imports: [

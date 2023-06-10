@@ -81,7 +81,8 @@ export class FirestoreService {
     const docRef = doc(this._firestore.firestore, "usuarios", uid);
     const docSnap = await getDoc(docRef) as any;
 
-    console.log("Document data:", docSnap.data());
+    console.log("UID:", uid);
+    console.log("Document:", docSnap.data());
     return docSnap.data() as UserDb;
   }
 
