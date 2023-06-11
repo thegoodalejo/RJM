@@ -11,6 +11,7 @@ import { DetalleUsuarioComponent } from 'src/app/PopupModals/detalle-usuario/det
 import { Observable, map } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ActualizarRolComponent } from 'src/app/PopupModals/actualizar-rol/actualizar-rol.component';
+import { AsignarAfirmacionComponent } from 'src/app/PopupModals/asignar-afirmacion/asignar-afirmacion.component';
 
 export interface TestDocs {
   nombre: string,
@@ -100,6 +101,18 @@ export class GobiernoComponent implements OnInit {
   }
 
   actualizarAfirmacion(usuario: UserDb) {
+    console.log("Modal Data =>",usuario);
 
+    const dialogRef = this.dialog.open(AsignarAfirmacionComponent, {
+      width: '300px',
+      data: usuario
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("Result Data =>", result);
+      if (result) {
+        this.gobiernoCollection.doc(usuario.id).update(result);
+      }
+    });
   }
 }

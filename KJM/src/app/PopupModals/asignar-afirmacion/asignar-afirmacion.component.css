@@ -1,0 +1,63 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 9999;
+}
+
+.filtro {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.table-container {
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.mat-table {
+    width: 100%;
+    border-collapse: collapse;
+    position: sticky;
+    top: 0;
+    /* Mantenga los encabezados fijos en la parte superior */
+    background-color: #f9f9f9;
+    /* Ajuste el color de fondo */
+}
+
+.mat-table th,
+.mat-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.mat-table th {
+    text-align: left;
+    font-weight: bold;
+}
+
+.mat-table td input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.cerrar {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #eaeaea;
+    border: none;
+    text-align: center;
+    width: auto;
+    /* Ajuste el ancho del botón según el contenido */
+    margin-top: 10px;
+    /* Agregue margen superior para separar el botón */
+}

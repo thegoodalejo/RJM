@@ -42,6 +42,13 @@ export class MembreciaComponent implements OnInit {
       )
     );
     this.miembrosFiltrados$ = this.miembros$;
+
+    this.miembrosFiltrados$ = this.miembros$.pipe(
+      map(
+        (array: NuevoMiembro[]) =>
+          array.sort((a, b) => a.nombre.localeCompare(b.nombre))
+      )
+    );
   }
 
   constructor(
@@ -53,7 +60,6 @@ export class MembreciaComponent implements OnInit {
 
     this.miembrosCollection = this.afs.collection<NuevoMiembro>('miembros');
     this.miembros$ = this.miembrosCollection.valueChanges();
-
   }
 
   applyFilter() {

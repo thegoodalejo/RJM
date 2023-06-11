@@ -39,7 +39,7 @@ export class HomeComponent {
           
           this._firestore.getUserDbInfo(user.uid).then(
             (response => {
-              
+              response.id = user.uid;
               this.userDbInfo = response as UserDb;
               console.log("User basic info", this.userDbInfo);
               if (this.userDbInfo.rol.includes('LiderDpto')) {

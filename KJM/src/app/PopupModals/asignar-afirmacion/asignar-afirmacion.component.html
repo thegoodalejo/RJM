@@ -1,0 +1,31 @@
+<div class="modal">
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput class="filtro" [(ngModel)]="filtro" (keyup)="applyFilter()" placeholder="Nombre o Telefono"
+            #input>
+    </mat-form-field>
+    <div class="table-container">   
+
+        <table mat-table [dataSource]="miembrosFiltrados$" class="mat-table">
+
+            <ng-container matColumnDef="check">
+                <th mat-header-cell *matHeaderCellDef>Asignado</th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (change)="onCheckboxChange($event, row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let persona"> {{persona.nombre}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['check', 'nombre']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['check', 'nombre']"></tr>
+
+        </table>
+
+    </div>
+    <button class="cerrar" mat-button color="primary" (click)="cerrarDialogo()">Actualizar</button>
+</div>

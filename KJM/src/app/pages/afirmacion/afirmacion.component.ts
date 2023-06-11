@@ -39,8 +39,6 @@ export class AfirmacionComponent implements OnDestroy {
   userDb!: UserDb;
   private subscription: Subscription = new Subscription;
 
-  //user info
-  user: any;
 
   //para el dropdown
   personas: ObjectWithReference<NuevoMiembro>[] = [];
@@ -87,31 +85,10 @@ export class AfirmacionComponent implements OnDestroy {
     private dialog: MatDialog,
     private _appData: AppDataService) {
 
-/*
-    this.fireAuth.isAuth().pipe(
-      map((user) => {
-        if (user) {
-          // Si el usuario está autenticado, almacena su información en la variable user
-          this.user = user;
-          console.log("AfirmacionComponent tiene la info del usuario " + user.displayName);
-        } else {
-          // Si el usuario no está autenticado, establece la variable user en null
-          this.user = null;
-        }
-      })
-    ).subscribe(
-      () => {
-        this._firestore.listaPersonasAfirmacion(this.fireAuth.user?.uid).then(obj => {
-          this.personas = obj.objetosMostrables;
-
-        });
-      }
-    );*/
-
     this.subscription = this._appData.userDb$.subscribe(
       (userDb) => {
         this.userDb = userDb;
-        console.log("New subscription", this.user);
+        console.log("New subscription", this.userDb);
       }
     );
 
@@ -188,8 +165,8 @@ export class AfirmacionComponent implements OnDestroy {
       registroDate: Date.now(),
       //Info
       personaRef: this.personaRef,
-      afirmador: this.user.displayName,
-      afirmadorID: this.user.uid,
+      afirmador: this.userDb.nombre,
+      afirmadorID: this.userDb.id,
       fechaReporte: datePickerLocal.getTime(),
 
       personaContesta: this.personaContesta,

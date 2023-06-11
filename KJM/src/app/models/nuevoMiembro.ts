@@ -2,6 +2,7 @@ import firebase from 'firebase/compat';
 
 export default interface NuevoMiembro {
     id?: any;
+    ref?: firebase.firestore.DocumentReference;
 
     nombre: string; // Obligatorio
     telefono: string; // Obligatorio
