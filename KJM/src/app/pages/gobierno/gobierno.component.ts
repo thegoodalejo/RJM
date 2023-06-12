@@ -85,7 +85,7 @@ export class GobiernoComponent implements OnInit {
   }
 
   actualizarRol(usuario: UserDb) {
-    console.log("Modal Data =>",usuario);
+    console.log("actualizarRol =>",usuario);
 
     const dialogRef = this.dialog.open(ActualizarRolComponent, {
       width: '300px',
@@ -101,7 +101,7 @@ export class GobiernoComponent implements OnInit {
   }
 
   actualizarAfirmacion(usuario: UserDb) {
-    console.log("Modal Data =>",usuario);
+    console.log("actualizarAfirmacion",usuario);
 
     const dialogRef = this.dialog.open(AsignarAfirmacionComponent, {
       width: '300px',

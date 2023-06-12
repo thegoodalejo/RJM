@@ -86,30 +86,30 @@ export class AsignarAfirmacionComponent implements OnInit {
     console.log("Hola");
     this.data.updateDate = Date.now();
     this.data.updateUser = this.userDb.nombre;
-    this.dialogRef.close(this.userDb);
+    this.dialogRef.close(this.data);
   }
 
   onCheckboxChange(event: MatCheckboxChange, object: NuevoMiembro) {
     if (event.checked) {
       console.log('Objeto seleccionado:', object);
       if (object.ref) {
-        if (!this.userDb.listToCall.includes(object.ref)) {
+        if (!this.data.listToCall.includes(object.ref)) {
           // La referencia no está repetida, se puede agregar al array
-          this.userDb.listToCall.push(object.ref);
+          this.data.listToCall.push(object.ref);
         }
       }
 
-      console.log(this.userDb.listToCall);
+      console.log(this.data.listToCall);
     } else {
       console.log('Objeto deseleccionado:', object);
       if (object.ref) {
-        const index = this.userDb.listToCall.indexOf(object.ref);
+        const index = this.data.listToCall.indexOf(object.ref);
         if (index !== -1) {
           // Eliminar la referencia utilizando splice
-          this.userDb.listToCall.splice(index, 1);
+          this.data.listToCall.splice(index, 1);
         }
       }
-      console.log(this.userDb.listToCall);
+      console.log(this.data.listToCall);
     }
   }
 
