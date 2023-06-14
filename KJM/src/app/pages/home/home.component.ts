@@ -1,4 +1,4 @@
-import { Component, } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -11,11 +11,11 @@ import { AppDataService } from 'src/app/services/app-data.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   user: any;
-
   userImageURL: any = '';
+
   userDbInfo: any;
 
   isDeptoLider: boolean = false;
@@ -30,6 +30,9 @@ export class HomeComponent {
     private _firestore: FirestoreService,
     private _appData: AppDataService
   ) {
+    
+  }
+  ngOnInit(): void {
     this.fireAuth.isAuth().pipe(
       map((user) => {
         if (user) {
@@ -41,20 +44,6 @@ export class HomeComponent {
             (response => {
               response.id = user.uid;
               this.userDbInfo = response as UserDb;
-              console.log("User basic info", this.userDbInfo);
-              if (this.userDbInfo.rol.includes('LiderDpto')) {
-                this.isDeptoLider = true;
-              } 
-              if (this.userDbInfo.rol.includes('Afirmador')) {
-                this.isAfirmador = true;
-              } 
-              if (this.userDbInfo.rol.includes('Admin')) {
-                this.isAdmin = true;
-              } 
-              if (this.userDbInfo.rol.includes('Miembro')) {
-                this.isMiembro = true;
-              } 
-
               this._appData.updateUserDb(response);
             })
           ).catch(error => console.log('Error al consultar usuario', error));

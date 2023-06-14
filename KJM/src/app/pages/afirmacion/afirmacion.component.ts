@@ -26,6 +26,7 @@ export interface Reporte {
   constesta: boolean;
   afirmador: string;
   id: firebase.firestore.DocumentReference;
+  ref: any;
 }
 
 @Component({
@@ -91,7 +92,7 @@ export class AfirmacionComponent implements OnDestroy {
         console.log("New subscription", this.userDb);
       }
     );
-
+ 
     const objetoPpal: DetalleAfirmador = {
       nombre: '',
       listToCall: [],
@@ -137,17 +138,19 @@ export class AfirmacionComponent implements OnDestroy {
       this._firestore.listaReportesAfirmacion(contactoEncontrado.id.id).then(obj => {
         this.reportes = obj.objetosMostrables;
         const dataSource2: Reporte[] = [];
-        obj.objetosMostrables.forEach(rep => {
-          console.log("Timestamp obj", rep.objeto.fechaReporte);
+        obj.objetosMostrables.forEach(response => {
+          console.log("Obj", response);
+          console.log("Ref obj", response.objeto.ref);
           const report: Reporte = {
-            fecha: rep.objeto.fechaReporte,
-            constesta: rep.objeto.personaContesta,
-            afirmador: rep.objeto.afirmador,
-            id: rep.id
+            fecha: response.objeto.fechaReporte,
+            constesta: response.objeto.personaContesta,
+            afirmador: response.objeto.afirmador,
+            id: response.id,
+            ref: response.id
           }
           dataSource2.push(report);
-          console.log("Creado =>", report)
-          console.log("Ref =>", report.id.path)
+          console.log("Creado =>", report);
+          console.log("Ref =>", report.ref);
 
         });
         this.dataSource = dataSource2;
@@ -165,6 +168,7 @@ export class AfirmacionComponent implements OnDestroy {
       registroDate: Date.now(),
       //Info
       personaRef: this.personaRef,
+      personaNombre: this.selectedOption,
       afirmador: this.userDb.nombre,
       afirmadorID: this.userDb.id,
       fechaReporte: datePickerLocal.getTime(),

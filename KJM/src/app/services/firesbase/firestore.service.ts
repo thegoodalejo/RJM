@@ -83,6 +83,7 @@ export class FirestoreService {
 
     console.log("UID:", uid);
     console.log("Document:", docSnap.data());
+    
     return docSnap.data() as UserDb;
   }
 

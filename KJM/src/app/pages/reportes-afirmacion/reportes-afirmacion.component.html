@@ -1,0 +1,20 @@
+<table mat-table [dataSource]="documentos$" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+      <td mat-cell *matCellDef="let reporte"> {{reporte.fechaReporte | date:'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="afirmador">
+      <th mat-header-cell *matHeaderCellDef> Afirmador </th>
+      <td mat-cell *matCellDef="let reporte"> {{reporte.afirmador}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nuevoMiembro">
+      <th mat-header-cell *matHeaderCellDef> Nuevo Miembro </th>
+      <td mat-cell *matCellDef="let reporte"> {{reporte.afirmador}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['fecha','afirmador', 'nuevoMiembro']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['fecha','afirmador', 'nuevoMiembro']" (click)="recordDetail(row)"></tr>
+  </table>

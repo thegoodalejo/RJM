@@ -14,15 +14,15 @@ export class DetalleReporteAfirmacionComponent {
 
   constructor(public matDialog: MatDialog,
     private dialogRef: MatDialogRef<DetalleReporteAfirmacionComponent>,
-    @Inject(MAT_DIALOG_DATA) _data:any,
+    @Inject(MAT_DIALOG_DATA) _data: any,
     private _firestore: FirestoreService) {
 
-      const docRef = _data.id as firebase.firestore.DocumentReference;
+    console.log("DataModal", _data.ref);
 
-      this._firestore.getDocFromRef(docRef).then(response => {
-        this.modalInfo = response;
-        console.log("Modal data",this.modalInfo.data());
-      });
+    this._firestore.getDocFromRef(_data.ref).then(response => {
+      this.modalInfo = response;
+      console.log("Modal data", this.modalInfo.data());
+    });
 
   }
 

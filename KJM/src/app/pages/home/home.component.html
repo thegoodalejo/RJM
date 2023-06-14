@@ -40,12 +40,24 @@
 					<span>Membrecia</span>
 				</button>
 				
+				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button" [routerLink]="['/app-home/app-reportes-afirmacion']">
+					<mat-icon>event_note</mat-icon>
+					<span>Reportes</span>
+				</button>
+
 				<mat-divider></mat-divider>
 
 				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button" [routerLink]="['/app-home/app-gobierno']">
 					<mat-icon>card_membership</mat-icon>
 					<span>Gobierno</span>
 				</button>
+
+				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button" [routerLink]="['/app-home/app-metricas-afirmacion']">
+					<mat-icon>bar_chart</mat-icon>
+					<span>Metricas</span>
+				</button>
+
+				
 
 				<mat-divider></mat-divider>
 

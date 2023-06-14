@@ -48,6 +48,8 @@ import { GobiernoComponent } from './pages/gobierno/gobierno.component';
 import { DetalleUsuarioComponent } from './PopupModals/detalle-usuario/detalle-usuario.component';
 import { ActualizarRolComponent } from './PopupModals/actualizar-rol/actualizar-rol.component';
 import { AsignarAfirmacionComponent } from './PopupModals/asignar-afirmacion/asignar-afirmacion.component';
+import { ReportesAfirmacionComponent } from './pages/reportes-afirmacion/reportes-afirmacion.component';
+import { MetricasAfirmacionComponent } from './pages/metricas-afirmacion/metricas-afirmacion.component';
 
 
 // TODO: Compilacion => ng build --configuration production
@@ -88,7 +90,9 @@ const app = initializeApp(firebaseConfig);
     GobiernoComponent,
     DetalleUsuarioComponent,
     ActualizarRolComponent,
-    AsignarAfirmacionComponent
+    AsignarAfirmacionComponent,
+    ReportesAfirmacionComponent,
+    MetricasAfirmacionComponent
 
   ],
   imports: [

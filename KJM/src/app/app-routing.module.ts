@@ -10,6 +10,8 @@ import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
 import { GobiernoComponent } from './pages/gobierno/gobierno.component';
+import { MetricasAfirmacionComponent } from './pages/metricas-afirmacion/metricas-afirmacion.component';
+import { ReportesAfirmacionComponent } from './pages/reportes-afirmacion/reportes-afirmacion.component';
 
 
 const routes: Routes = [
@@ -23,6 +25,8 @@ const routes: Routes = [
       { path: 'registro-miembro', component: RegistroMiembroComponent },
       { path: 'app-membrecia', component: MembreciaComponent },
       { path: 'app-gobierno', component: GobiernoComponent },
+      { path: 'app-reportes-afirmacion', component: ReportesAfirmacionComponent },
+      { path: 'app-metricas-afirmacion', component: MetricasAfirmacionComponent },
     ]
   },
   { path: 'app-login', component: LoginComponent },
