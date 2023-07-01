@@ -1,36 +1,49 @@
-@media screen and (max-width: 600px) {
-    .completed-step.mat-step-header {
-      background-color: green;
-      /* cambia el color del mat-step anterior a verde */
-      color: white;
-      /* cambia el color del texto del mat-step anterior a blanco */
-    }
-  
-    .container-membrecia {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 5px;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
-  
-    .mat-label {
-      width: 100%;
-      padding-bottom: 10px;
-      padding-top: 10px;
-    }
-  
-    .button-submit{
-      width: 100%
-    }
+.custom-stepper {
+  width: 100%;
+}
 
-    .mat-input{
-      width: 100%;
-      padding-bottom: 10px;
-      padding-top: 10px;
-    }
-  
+.full-width {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions button {
+  min-width: 120px;
+}
+
+.container-membrecia {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.switch-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.switch-toggle {
+  --thumb-color: #2196F3; /* Color del interruptor cuando está activado */
+  --track-color: rgba(0, 0, 0, 0.38); /* Color de la pista del interruptor */
+  --thumb-size: 24px; /* Tamaño del pulgar del interruptor */
+
+  /* Estilos adicionales */
+  width: fit-content;
+  height: fit-content;
+}
+
+.switch-text {
+  margin-left: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 600px) {
+  .mat-stepper-horizontal {
+    flex-direction: column;
   }
-  
-  @media screen and (min-width: 601px) {}
+}

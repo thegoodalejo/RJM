@@ -1,25 +1,53 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AppDataService } from './app-data.service';
+import UserDb from '../models/userDb';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuardService {
 
-  constructor(
-    private auth: AngularFireAuth,
-    private router: Router,
-  ) { }
+  userAuth$: any;
+  userDb$: any;
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> | Observable<boolean> {
-    return this.auth.authState.pipe(
+  private subscriptionAuth: Subscription = new Subscription;
+  private subscriptionDb: Subscription = new Subscription;
+
+  constructor(
+    private fireAuth: AngularFireAuth,
+    private router: Router,
+    private appData: AppDataService
+  ) {
+    this.subscriptionAuth = this.appData.userAuth$.subscribe(
+      (userAuth) => {
+        this.userAuth$ = userAuth;
+      }
+    );
+    this.subscriptionDb = this.appData.userDb$.subscribe(
+      (userDb) => {
+        this.userDb$ = userDb;
+      }
+    );
+  }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> {
+    const requiredRole = next.data['role'];
+    console.log("Actual userDb", this.userDb$);
+
+    console.log("requiredRole", requiredRole);
+    return this.fireAuth.authState.pipe(
       map((user) => {
+        console.log("AuthGuard", user?.uid);
         if (user) {
-          // Si el usuario está autenticado, permite el acceso
-          console.log("User autentikado ?");
           return true;
         } else {
           // Si el usuario no está autenticado, redirige al usuario a la página de inicio de sesión
@@ -29,5 +57,10 @@ export class AuthGuardService {
         }
       })
     );
+  }
+
+  private hasRequiredRoles(userRoles: string[], requiredRoles: string[]): boolean {
+    // Verifica si el usuario tiene al menos uno de los roles requeridos
+    return userRoles.some(role => requiredRoles.includes(role));
   }
 }

@@ -1,106 +1,113 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
-import { collection, getDocs, doc, getDoc, addDoc } from "firebase/firestore";
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, lastValueFrom } from 'rxjs';
-import { forkJoin } from 'rxjs';
-import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { runTransaction } from "firebase/firestore";
+import firebase from 'firebase/compat/app';
 
-import ToAfirm from 'src/app/models/afirmacionList';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+
+import { Injectable, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription, lastValueFrom } from 'rxjs';
+
 import DetalleAfirmador from 'src/app/models/detalleAfirmador';
 import NuevoMiembro from 'src/app/models/nuevoMiembro';
 import AfirmacionReporte from 'src/app/models/afirmacionReporte';
 import ObjectWithReference from 'src/app/models/objectWithReferenc';
-
-
-import firebase from 'firebase/compat/app';
 import DetalleReportesAfirmacionMiembro from 'src/app/models/detalleReportesAfirmacionMiembro';
 import UserDb from 'src/app/models/userDb';
+import { AppDataService } from '../app-data.service';
+import { LoadingModalComponent } from 'src/app/components/loading-modal/loading-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
+  @ViewChild(LoadingModalComponent)
+  loadingModal!: LoadingModalComponent;
+
+  userAuth$: any;
+  userDb$: any;
+
+  private subscriptionAuth: Subscription = new Subscription;
+  private subscriptionDb: Subscription = new Subscription;
+
   constructor(
-    private _firestore: AngularFirestore,
-    private _snackBar: MatSnackBar,
-  ) { }
-
-  async getDocFromRef(docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
-    const docSnap = await getDoc(docRef);
-    return docSnap;
+    private firestore: AngularFirestore,
+    private snackBar: MatSnackBar,
+    private appData: AppDataService,
+    private dialog: MatDialog
+  ) {
+    this.subscriptionAuth = this.appData.userAuth$.subscribe(
+      (userAuth) => {
+        this.userAuth$ = userAuth;
+        if (this.userAuth$) {
+          const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
+          userRef.get().subscribe(resp => {
+            if (resp.exists) {
+              this.appData.updateUserDb(resp.data() as UserDb);
+            } else {
+              this.syncUserDb();
+            }
+          });
+        }
+      }
+    );
+    this.subscriptionDb = this.appData.userDb$.subscribe(
+      (userDb) => {
+        this.userDb$ = userDb;
+      }
+    );
   }
 
-  async getDocumentsFromCollection() {
-    try {
-      const colRef = collection(this._firestore.firestore, "miembros");
-      const querySnapshot = await getDocs(collection(this._firestore.firestore, 'miembros'));
-      return querySnapshot;
-    } catch (error) {
-      console.error('Error fetching documents:', error);
-      return [];
-    }
+  async syncUserDb() {
+    await this.createNewUserDb().then(() => {
+      const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
+      userRef.get().subscribe(resp => {
+        if (resp.exists) {
+          this.userDb$ = resp;
+          this.appData.updateUserDb(resp.data() as UserDb);
+        }
+      });
+    });
   }
 
-  getTimeStamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
-  }
+  async createNewUserDb() {
+    const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
+    const data: UserDb = {
+      onBoarding: false,
+      lastConection: Date.now(),
+      nombre: this.userAuth$.displayName,
+      email: this.userAuth$.email,
+      rol: ["Nuevo"],
+      ministerio: '',
+      ubicacion: '',
+      posicion: '',
+      listToCall: [],
+      recordDate: Date.now(),
+      updateDate: Date.now(),
+      updateUser: this.userAuth$.displayName
+    };
 
-  async getMembreciaList() {
-    try {
-
-    } catch (error) {
-
-    }
-    const colRef = collection(this._firestore.firestore, "miembros");
-    const docSnap = await getDocs(colRef);
-    return docSnap;
-  }
-
-  async getGobiernoList() {
-    try {
-
-    } catch (error) {
-
-    }
-    const colRef = collection(this._firestore.firestore, "usuarios");
-    const docSnap = await getDocs(colRef);
-    return docSnap;
-  }
-
-  async getAfirmacionReportSingle(uid: any) {
-    const colRef = collection(this._firestore.firestore, "miembros");
-    const docSnap = await getDocs(colRef);
-    return docSnap;
-  }
-
-  async getUserDbInfo(uid: any) {
-    const docRef = doc(this._firestore.firestore, "usuarios", uid);
-    const docSnap = await getDoc(docRef) as any;
-
-    console.log("UID:", uid);
-    console.log("Document:", docSnap.data());
-    
-    return docSnap.data() as UserDb;
+    await userRef.set(data).then(() => {
+      console.log("Create response");
+    }).catch(err => {
+      console.log("Error => ", err);
+    });
   }
 
   async createNewUser(user: any) {
     console.log("createNewUser");
     console.log("Current UID", user.uid);
-    try {
 
-    } catch (error) {
+    const userRef = this.firestore.collection('usuarios').doc(user.uid);
+    const userDoc = userRef.get().subscribe(resp => {
+      console.log("Respiesta oinicia", resp);
+    });
 
-    }
-    const userRef = this._firestore.collection('usuarios').doc(user.uid);
-    const userDoc = await lastValueFrom(userRef.get());
-
-    if (!userDoc.exists) {
-      console.log("actualmente usuario no existe");
+    if (!userDoc) {
       const data: UserDb = {
+        onBoarding: false,
+        lastConection: Date.now(),
         nombre: user.displayName,
         email: user.email,
         rol: ["Nuevo"],
@@ -114,42 +121,124 @@ export class FirestoreService {
       };
 
       await userRef.set(data)
-        .then(() => console.log('Usuario creado correctamente'))
-        .catch(error => console.log('Error al crear usuario:', error));
+        .then((response) => {
+          console.log('Creado Usuario ¡?¡?', response)
+        })
+        .catch(error => {
+          console.log('Error al crear usuario:', error);
+        });
     } else {
       console.log("El usuario ya existe");
     }
   }
 
-  async crearNuevoMiembro(data: NuevoMiembro) {
-    console.log("Creando nuevo miembro ?????????", data);
-    const miembrosRef = this._firestore.collection('miembros');
-    await miembrosRef.add(data)
-      .then(
-        () => {
-          this._snackBar.open('Usuario creado correctamente', 'Cerrar',
-            {
-              duration: 3000
-            }
-          );
-          //return true;
+  async onBoardingUpdate(data: any): Promise<boolean> {
+    const dialogRef = this.dialog.open(LoadingModalComponent, {
+      disableClose: true,
+      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
+    });
+    dialogRef.componentInstance.open('loading');
+    try {
+      const documentRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
+      documentRef.update(data)
+        .then(() => {
+          dialogRef.componentInstance.update('success', "Actualizado exitosamente");
+          this.appData.updateOnBoading(data);
+
+          return true;
         })
-      .catch(error => {
-        this._snackBar.open('No se pudo crear el usuario', 'Cerrar', {
-          duration: 3000
+        .catch(() => {
+          dialogRef.componentInstance.update('failure', "Error al actualizar");
+          return false;
         });
-        // return false;
-      });
+    } catch (error) {
+      return false;
+    }
+
+    return false;
+  }
+
+  async getDocFromRef(docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
+    const docSnap = await getDoc(docRef);
+    return docSnap;
+  }
+
+  async getDocumentsFromCollection() {
+    try {
+      const colRef = collection(this.firestore.firestore, "miembros");
+      const querySnapshot = await getDocs(collection(this.firestore.firestore, 'miembros'));
+      return querySnapshot;
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      return [];
+    }
+  }
+
+  getTimeStamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
+  async getMembreciaList() {
+    const colRef = collection(this.firestore.firestore, "miembros");
+    const docSnap = await getDocs(colRef);
+    return docSnap;
+  }
+
+  async getGobiernoList() {
+    const colRef = collection(this.firestore.firestore, "usuarios");
+    const docSnap = await getDocs(colRef);
+    return docSnap;
+  }
+
+  async getAfirmacionReportSingle(uid: any) {
+    const colRef = collection(this.firestore.firestore, "miembros");
+    const docSnap = await getDocs(colRef);
+    return docSnap;
+  }
+
+  async getUserDbInfo(uid: any) {
+    const docRef = doc(this.firestore.firestore, "usuarios", uid);
+    const docSnap = await getDoc(docRef) as any;
+
+    if (!docSnap.data()) {
+      console.log("Ups necesitamos crear usuario=");
+    }
+
+    console.log("UID:", uid);
+    console.log("Document:", docSnap.data());
+
+    return docSnap.data() as UserDb;
+  }
+
+  async crearNuevoMiembro(data: NuevoMiembro): Promise<boolean> {
+    data.recordUser = this.userAuth$.displayName;
+    data.updateUser = this.userAuth$.displayName;
+    const dialogRef = this.dialog.open(LoadingModalComponent, {
+      disableClose: true,
+      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
+    });
+
+    dialogRef.componentInstance.open('loading');
+    const dbRef  = this.userDb$.ministerio + this.userDb$.ubicacion;
+    try {
+      const miembrosRef = this.firestore.collection(dbRef + 'Miembros');
+      await miembrosRef.add(data);
+      dialogRef.componentInstance.update('success', "Creado exitosamente");
+      return true;
+    } catch (error) {
+      dialogRef.componentInstance.update('failure', "No se pudo crear el usuario");
+      return false;
+    }
   }
 
   async createNewAfirmacionRecord(data: AfirmacionReporte) {
     console.log("New doc data: => ", data);
 
-    const historialReporteRef = this._firestore.collection<AfirmacionReporte>('historialAfirmacion');
+    const historialReporteRef = this.firestore.collection<AfirmacionReporte>('historialAfirmacion');
     const nuevoReporteRef = historialReporteRef.doc();
     const nuevoReporte: AfirmacionReporte = data;
 
-    const miembroDocRef = this._firestore.doc(data.personaRef);
+    const miembroDocRef = this.firestore.doc(data.personaRef);
 
     const transaccion = async (transaction: firebase.firestore.Transaction): Promise<void> => {
       // retorno el obj miembro
@@ -163,9 +252,9 @@ export class FirestoreService {
       // actualizo la info de obj miembro
       transaction.update(miembroDocRef.ref, { historialAfirmacion: historialAfirmacion });
     };
-    await this._firestore.firestore.runTransaction(transaccion).then(
+    await this.firestore.firestore.runTransaction(transaccion).then(
       () => {
-        this._snackBar.open('Reporte creado correctamente', 'Cerrar',
+        this.snackBar.open('Reporte creado correctamente', 'Cerrar',
           {
             duration: 3000
           }
@@ -173,7 +262,7 @@ export class FirestoreService {
         //return true;
       })
       .catch(error => {
-        this._snackBar.open('No se pudo crear el reporte', 'Cerrar', {
+        this.snackBar.open('No se pudo crear el reporte', 'Cerrar', {
           duration: 3000
         });
         console.log(error);
@@ -183,14 +272,14 @@ export class FirestoreService {
 
 
   createDoc(data: any, path: string, id: string) {
-    const collection = this._firestore.collection(path);
+    const collection = this.firestore.collection(path);
     return collection.doc(id).set(data);
   }
 
   async getListToCall(uid: any) {
     console.log('coleccion de afirmacion aaaaaaaaaaaaaaaaaa');
 
-    const docRef = doc(this._firestore.firestore, "afirmacion", uid);
+    const docRef = doc(this.firestore.firestore, "afirmacion", uid);
     const docSnap = await getDoc(docRef) as any;
 
     if (docSnap.exists()) {
@@ -216,7 +305,7 @@ export class FirestoreService {
 
     console.log('nuevo servicio, retirnar lista de personas para afirmar');
 
-    const docRef = doc(this._firestore.firestore, "afirmacion", uid);
+    const docRef = doc(this.firestore.firestore, "afirmacion", uid);
     const docSnap = await getDoc(docRef) as any;
     objetoPpal.listToCall = docSnap.data().listToCall;
     objetoPpal.nombre = docSnap.data().nombre;
@@ -251,7 +340,7 @@ export class FirestoreService {
 
     console.log('Servicio: Retornar reportes de afirmacion x miembro', uid);
 
-    const docRef = doc(this._firestore.firestore, "miembros", uid);
+    const docRef = doc(this.firestore.firestore, "miembros", uid);
     console.log("Referencia", docRef);
     const docSnap = await getDoc(docRef) as any;
     console.log("Initial Data", docSnap.data());

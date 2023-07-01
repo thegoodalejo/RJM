@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -50,7 +50,10 @@ import { ActualizarRolComponent } from './PopupModals/actualizar-rol/actualizar-
 import { AsignarAfirmacionComponent } from './PopupModals/asignar-afirmacion/asignar-afirmacion.component';
 import { ReportesAfirmacionComponent } from './pages/reportes-afirmacion/reportes-afirmacion.component';
 import { MetricasAfirmacionComponent } from './pages/metricas-afirmacion/metricas-afirmacion.component';
-
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { OnBoardingComponent } from './pages/on-boarding/on-boarding.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 
 // TODO: Compilacion => ng build --configuration production
 // TODO: Deploy => firebase deploy
@@ -92,7 +95,9 @@ const app = initializeApp(firebaseConfig);
     ActualizarRolComponent,
     AsignarAfirmacionComponent,
     ReportesAfirmacionComponent,
-    MetricasAfirmacionComponent
+    MetricasAfirmacionComponent,
+    OnBoardingComponent,
+    LoadingModalComponent
 
   ],
   imports: [
@@ -101,6 +106,7 @@ const app = initializeApp(firebaseConfig);
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -121,7 +127,14 @@ const app = initializeApp(firebaseConfig);
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTableModule,
-    MatDialogModule
+    MatDialogModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [DatePipe,],
   bootstrap: [AppComponent]

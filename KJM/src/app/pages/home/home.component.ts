@@ -1,63 +1,48 @@
 import { Component, OnInit, } from '@angular/core';
+
 import { AuthService } from '../../services/firesbase/auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
 import UserDb from 'src/app/models/userDb';
 import { AppDataService } from 'src/app/services/app-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  user: any;
-  userImageURL: any = '';
+  userAuth$: any;
+  userDb$: any;
 
-  userDbInfo: any;
-
-  isDeptoLider: boolean = false;
-  isAfirmador: boolean = false;
-  isAdmin: boolean = false;
-  isMiembro: boolean = false;
-
+  private subscriptionAuth: Subscription = new Subscription;
+  private subscriptionDb: Subscription = new Subscription;
 
   constructor(
     public fireAuth: AuthService,
     private router: Router,
-    private _firestore: FirestoreService,
-    private _appData: AppDataService
+    private firestore: FirestoreService,
+    private appData: AppDataService
   ) {
-    
+    this.subscriptionAuth = this.appData.userAuth$.subscribe(
+      (userAuth) => {
+        this.userAuth$ = userAuth;
+      }
+    );
+    this.subscriptionDb = this.appData.userDb$.subscribe(
+      (userDb) => {
+        this.userDb$ = userDb;
+      }
+    );
   }
-  ngOnInit(): void {
-    this.fireAuth.isAuth().pipe(
-      map((user) => {
-        if (user) {
-          // Si el usuario está autenticado, almacena su información en la variable user
-          this.user = user;
-          this.userImageURL = user.photoURL;
-          
-          this._firestore.getUserDbInfo(user.uid).then(
-            (response => {
-              response.id = user.uid;
-              this.userDbInfo = response as UserDb;
-              this._appData.updateUserDb(response);
-            })
-          ).catch(error => console.log('Error al consultar usuario', error));
-        } else {
-          // Si el usuario no está autenticado, establece la variable user en null
-          this.user = null;
-        }
-      })
-    ).subscribe();
-  }
+
 
   roleCheck(role:string){
     try {
-      return this.userDbInfo.rol.includes(role);
+      return this.userDb$.rol.includes(role);
     } catch (error) {
       return false;
     }
@@ -65,4 +50,5 @@ export class HomeComponent implements OnInit {
   }
 
 }
+
 

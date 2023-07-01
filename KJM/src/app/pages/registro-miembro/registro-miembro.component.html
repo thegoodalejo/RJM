@@ -1,3 +1,4 @@
+<!--
 <div class="container-membrecia">
     <mat-label>¿Autoriza usted el tratamiento de uso de sus datos personales?</mat-label>
     <mat-slide-toggle [(ngModel)]="autorizaCompartirInfo" [checked]="autorizaCompartirInfo">
@@ -67,5 +68,95 @@
     <mat-step>
         <ng-template matStepLabel>Finalizar</ng-template>
         <button class="button-submit" mat-button color="primary" (click)="crearMiembro()">Enviar</button>
+    </mat-step>
+</mat-vertical-stepper>
+-->
+
+
+
+<div class="container-membrecia">
+    <mat-label class="switch-label">¿Autoriza el tratamiento de uso de sus datos personales?</mat-label>
+    <mat-slide-toggle class="switch-toggle" [(ngModel)]="autorizaCompartirInfo" [checked]="autorizaCompartirInfo">
+      <span class="switch-text">{{autorizaCompartirInfo ? 'Sí' : 'No'}}</span>
+    </mat-slide-toggle>
+  </div>
+  
+
+  <mat-vertical-stepper [linear]="true" #stepper *ngIf="autorizaCompartirInfo" class="custom-stepper">
+    <mat-step [stepControl]="formGroup1">
+        <ng-template matStepLabel>Paso 1</ng-template>
+        <form [formGroup]="formGroup1">
+            <mat-form-field>
+                <input matInput formControlName="nombre" placeholder="Nombre completo" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="telefono" placeholder="Teléfono" pattern="[0-9]*" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Género</mat-label>
+                <mat-select formControlName="genero" required>
+                    <mat-option value="Hombre">Hombre</mat-option>
+                    <mat-option value="Mujer">Mujer</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha de nacimiento</mat-label>
+                <input matInput [matDatepicker]="datePicker" formControlName="fechaNacimiento" placeholder="Fecha de nacimiento">
+                <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="invitador" placeholder="¿Quién lo invitó?" required>
+            </mat-form-field>
+            <div class="actions">
+                <button mat-button matStepperNext>Continuar</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="formGroup2">
+        <ng-template matStepLabel>Paso 2</ng-template>
+        <form [formGroup]="formGroup2">
+            <mat-form-field>
+                <input matInput formControlName="barrio" placeholder="Barrio" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="direccion" placeholder="Dirección" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="correoElectronico" placeholder="Correo electrónico" [email]="true" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Red</mat-label>
+                <mat-select formControlName="red" required>
+                    <mat-option value="red1">Red 1</mat-option>
+                    <mat-option value="red2">Red 2</mat-option>
+                    <mat-option value="red3">Red 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="actions">
+                <button mat-button matStepperPrevious>Volver</button>
+                <button mat-button matStepperNext>Continuar</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Paso 3</ng-template>
+        <div>
+            <p>Revisa los datos ingresados:</p>
+            <p>Nombre: {{ formGroup1.value.nombre }}</p>
+            <p>Teléfono: {{ formGroup1.value.telefono }}</p>
+            <p>Género: {{ formGroup1.value.genero }}</p>
+            <p>Fecha de nacimiento: {{ formGroup1.value.fechaNacimiento | date }}</p>
+            <p>¿Quién lo invitó?: {{ formGroup1.value.invitador }}</p>
+            <p>Barrio: {{ formGroup2.value.barrio }}</p>
+            <p>Dirección: {{ formGroup2.value.direccion }}</p>
+            <p>Correo electrónico: {{ formGroup2.value.correoElectronico }}</p>
+            <p>Red: {{ formGroup2.value.red }}</p>
+        </div>
+        <div class="actions">
+            <button mat-button matStepperPrevious>Volver</button>
+            <button mat-button (click)="submitForm()"
+                [disabled]="!formGroup1.valid || !formGroup2.valid">Enviar</button>
+        </div>
     </mat-step>
 </mat-vertical-stepper>

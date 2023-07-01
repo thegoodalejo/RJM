@@ -23,7 +23,7 @@ export class DetalleMiembroComponent {
   constructor(public matDialog: MatDialog,
     private dialogRef: MatDialogRef<DetalleMiembroComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private _appData: AppDataService) {
+    private _appData: AppDataService) { 
       //Get User Info
       this.subscription = this._appData.userDb$.subscribe(
         (userDb) => {

@@ -5,7 +5,7 @@
 
 <body>
 	<header class="header">
-		
+
 		<mat-toolbar class="mat-elevation-z8">
 			<button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
 				<mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
@@ -16,10 +16,17 @@
 
 		<mat-sidenav-container>
 			<mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
-				<img class="avatar mat-elevation-z8" [src]="userImageURL" alt="User Profile Image" />
+				<ng-container *ngIf="userAuth$">
+					<img class="avatar mat-elevation-z8" [src]="userAuth$.photoURL?.toString()"
+						alt="User Profile Image" />
+				</ng-container>
 
-				<h4 class="name">{{user?.displayName}}</h4>
-				<p class="designation">{{user?.uid}}</p>
+				<ng-container *ngIf="userAuth$">
+					<h4 class="name">{{userAuth$.displayName}}</h4>
+				</ng-container>
+				<ng-container *ngIf="userAuth$">
+					<p class="designation">{{userAuth$.uid}}</p>
+				</ng-container>
 
 				<mat-divider></mat-divider>
 
@@ -27,37 +34,43 @@
 					<mat-icon>home</mat-icon>
 					<span>Home</span>
 				</button>
-				<button *ngIf="this.roleCheck('Afirmador')" mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion', user]">
+				<button *ngIf="this.roleCheck('Afirmador')" mat-button class="menu-button"
+					[routerLink]="['/app-home/app-afirmacion']">
 					<mat-icon>call</mat-icon>
 					<span>Afirmacion</span>
 				</button>
-				<button *ngIf="this.roleCheck('Miembro')" mat-button class="menu-button" [routerLink]="['/app-home/registro-miembro']">
+				<button *ngIf="this.roleCheck('Miembro')" mat-button class="menu-button"
+					[routerLink]="['/app-home/registro-miembro']">
 					<mat-icon>add_circle</mat-icon>
 					<span>Nuevo Miembro</span>
 				</button>
-				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button" [routerLink]="['/app-home/app-membrecia']">
+				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
+					[routerLink]="['/app-home/app-membrecia']">
 					<mat-icon>supervisor_account</mat-icon>
 					<span>Membrecia</span>
 				</button>
-				
-				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button" [routerLink]="['/app-home/app-reportes-afirmacion']">
+
+				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
+					[routerLink]="['/app-home/app-reportes-afirmacion']">
 					<mat-icon>event_note</mat-icon>
 					<span>Reportes</span>
 				</button>
 
 				<mat-divider></mat-divider>
 
-				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button" [routerLink]="['/app-home/app-gobierno']">
+				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button"
+					[routerLink]="['/app-home/app-gobierno']">
 					<mat-icon>card_membership</mat-icon>
 					<span>Gobierno</span>
 				</button>
 
-				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button" [routerLink]="['/app-home/app-metricas-afirmacion']">
+				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button"
+					[routerLink]="['/app-home/app-metricas-afirmacion']">
 					<mat-icon>bar_chart</mat-icon>
 					<span>Metricas</span>
 				</button>
 
-				
+
 
 				<mat-divider></mat-divider>
 

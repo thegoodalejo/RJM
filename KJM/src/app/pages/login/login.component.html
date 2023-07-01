@@ -1,1 +1,31 @@
-<app-google-logoin></app-google-logoin>
+<ng-container [ngSwitch]="true">
+    <ng-container *ngSwitchCase="platform.ANDROID">
+        <ng-container *ngTemplateOutlet="templateAndroid"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="platform.IOS">
+        <ng-container *ngTemplateOutlet="templateIOS"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        <ng-container *ngTemplateOutlet="templateWeb"></ng-container>
+    </ng-container>
+</ng-container>
+
+<!-- Contenido específico para Android -->
+<ng-template #templateAndroid>
+    <p>Estás en la plataforma Android.</p>
+    <app-google-logoin></app-google-logoin>
+    <button (click)="test()"> </button>
+</ng-template>
+
+<!-- Contenido específico para iOS -->
+<ng-template #templateIOS>
+    <p>Estás en la plataforma iOS.</p>
+    <app-google-logoin></app-google-logoin>
+</ng-template>
+
+<!-- Contenido específico para Web -->
+<ng-template #templateWeb>
+    <p>Estás en la plataforma Web.</p>
+    <app-google-logoin></app-google-logoin>
+</ng-template>
+

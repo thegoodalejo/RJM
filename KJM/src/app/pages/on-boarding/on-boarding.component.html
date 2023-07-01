@@ -1,0 +1,45 @@
+<body>
+    <div class="container">
+        <h1>Bienvenido</h1>
+
+        <form>
+            <div>
+                <label for="ministerio">Ministerio:</label>
+                <select id="ministerio" name="ministerio" [(ngModel)]="selectedMinisterioId"
+                    (change)="onMinisterioChange()">
+                    <option value="">Seleccione un ministerio</option>
+                    <option *ngFor="let ministerio of ministerios" [value]="ministerio.id">{{ ministerio.nombre }}
+                    </option>
+                </select>
+            </div>
+            <p *ngIf="selectedMinisterioId > 0" [@fadeIn]="fadeIn" (animationDone)="fadeIn = true">
+                <span>
+                    {{ selectedMinisterioObj.descripcion }}
+                </span>
+            </p>
+
+            <div *ngIf="selectedMinisterioId">
+                <label for="sede">Sede:</label>
+                <select id="sede" name="sede" [(ngModel)]="selectedSedeId" (change)="onSedeChange()">
+                    <option value="">Seleccione una sede</option>
+                    <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.ubicacion }}</option>
+                </select>
+            </div>
+
+            <p *ngIf="selectedSedeId > 0" [@fadeIn]="fadeIn" (animationDone)="fadeIn = true">
+                <span>
+                    {{ selectedSedeObj.descripcion }}
+                </span>
+            </p>
+            <p *ngIf="selectedSedeId > 0" [@fadeIn]="fadeIn" (animationDone)="fadeIn = true">
+                <span>
+                    {{ selectedSedeObj.direccion }}
+                </span>
+            </p>
+
+            <button *ngIf="selectedSedeId > 0 && selectedMinisterioId > 0" type="submit" class="btn" [@fadeIn]="fadeIn"
+                (animationDone)="fadeIn = true" (click)="updateOnBoading()">Continuar</button>
+        </form>
+    </div>
+
+</body>
