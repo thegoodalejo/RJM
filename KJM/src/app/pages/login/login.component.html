@@ -12,9 +12,29 @@
 
 <!-- Contenido específico para Android -->
 <ng-template #templateAndroid>
-    <p>Estás en la plataforma Android.</p>
-    <app-google-logoin></app-google-logoin>
-    <button (click)="test()"> </button>
+    <header [ngClass]="{ 'dark-mode': darkMode }">
+        <h1>Welcome to Kingdom</h1>
+        <div class="toggle-switch">
+            <input type="checkbox" id="toggle-mode" [(ngModel)]="darkMode" (change)="toggleMode()" />
+            <label for="toggle-mode"></label>
+        </div>
+    </header>
+
+    <body>
+
+        <div class="part-1">
+            <div class="slogan">
+                <h2>Venga tu Reino</h2>
+                <h4>a la tierra</h4>
+            </div>
+        </div>
+
+        <div class="part-2">
+            <app-google-logoin></app-google-logoin>
+        </div>
+
+    </body>
+
 </ng-template>
 
 <!-- Contenido específico para iOS -->
@@ -28,4 +48,3 @@
     <p>Estás en la plataforma Web.</p>
     <app-google-logoin></app-google-logoin>
 </ng-template>
-

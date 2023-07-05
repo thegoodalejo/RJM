@@ -11,7 +11,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
   user: any;
 
   private userAuth$: any;
@@ -23,9 +23,12 @@ export class AuthService {
     private appData: AppDataService,
     private router: Router
   ) {
-    console.log("AuthService constr");
+    console.log("FireAuth init");
     this.doStuff();
     
+  }
+  ngOnInit(): void {
+    console.log("Auth Service...");
   }
 
   async doStuff(){

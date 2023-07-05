@@ -1,13 +1,19 @@
 import firebase from 'firebase/compat';
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, take } from 'rxjs';
 import UserDb from '../models/userDb';
+import { AppData } from '../models/appData';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppDataService {
+
+  private staticAppData: AppData = {
+    isNewUser: false
+  };
+
 
   private userAuthSource = new BehaviorSubject<firebase.User | null>(null);
   userAuth$ = this.userAuthSource.asObservable();
@@ -17,10 +23,10 @@ export class AppDataService {
 
   updateUserDb(userDb: UserDb) {
     this.userDbSource.next(userDb);
-    console.log("Update UserDb", userDb);
+    console.log("SomeUpdate");
   }
 
-  updateOnBoading(data:any){
+  async updateOnBoading(data: any) {
     this.userDb$.pipe(take(1)).subscribe(userDb => {
       userDb.onBoarding = data.onBoarding;
       userDb.ministerio = data.ministerio;
@@ -31,8 +37,19 @@ export class AppDataService {
 
   updateUserAuth(userAuth: firebase.User) {
     this.userAuthSource.next(userAuth);
-    console.log("Update UserAuth", userAuth);
   }
 
-  constructor() { }
+  getUserDb() {
+    return this.userDbSource.asObservable();
+  }
+
+  getStaticData(): AppData {
+    return this.staticAppData;
+  }
+
+  async updateStaticData(updatedData: any): Promise<any> {
+    console.log("AppStaticData", updatedData);
+    this.staticAppData = { ...this.staticAppData, ...updatedData };
+    return;
+  }
 }

@@ -17,10 +17,8 @@ export class LoadingModalComponent {
 
   show: boolean = false;
   message: string = '';
-  status: 'loading' | 'success' | 'failure' = 'loading';
 
-  open(status: any) {
-    this.status = status;
+  open() {
     this.show = true;
     setTimeout(() => {
       this.close();
@@ -32,8 +30,7 @@ export class LoadingModalComponent {
     this.dialogRef.close();
   }
 
-  update(status: any, message: any) {
-    this.status = status;
+  update(message: any) {
     setTimeout(() => {
       this.close();
     }, 500);

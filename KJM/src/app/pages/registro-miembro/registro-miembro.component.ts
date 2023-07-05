@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/firesbase/auth.service';
 import { map } from 'rxjs/operators';
 import { MatStepper } from '@angular/material/stepper';
+import { Observable } from 'rxjs';
+import { ConsultService } from 'src/app/services/http/consult.service';
 
 @Component({
   selector: 'app-registro-miembro',
@@ -21,18 +23,16 @@ export class RegistroMiembroComponent {
   @ViewChild('stepper')
   stepper!: MatStepper;
 
-  //user info
-  //user: any;
-
-
   //step 1
   autorizaCompartirInfo: boolean = false;
+
+  redes: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private firestore: FirestoreService,
-    private _authService: AuthService,
+    private http: ConsultService,
   ) {
 
     this.formGroup1 = this.formBuilder.group({
@@ -45,11 +45,10 @@ export class RegistroMiembroComponent {
 
     this.formGroup2 = this.formBuilder.group({
       barrio: ['', Validators.required],
-      direccion: ['', Validators.required],
-      correoElectronico: ['', [Validators.required, Validators.email]],
+      direccion: [''],
+      correoElectronico: ['', Validators.email],
       red: ['', Validators.required]
     });
-
   }
 
   nextStep() {
@@ -101,6 +100,8 @@ export class RegistroMiembroComponent {
         this.formGroup2.reset();
       }
     });
+
+
   }
 
 }

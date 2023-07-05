@@ -17,6 +17,15 @@ $KJM-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 // The warn palette is optional (defaults to red).
 $KJM-warn: mat.define-palette(mat.$red-palette);
 
+$darkPrimary: #000000;
+$lightPrimary: #ffffff;
+$primary: mat.$grey-palette;
+$textIcons: mat.$grey-palette;
+$accent: mat.$cyan-palette;
+$primaryText: mat.$grey-palette;
+$secondaryText: mat.$grey-palette;
+$divider: mat.$grey-palette;
+
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
 $KJM-theme: mat.define-light-theme((

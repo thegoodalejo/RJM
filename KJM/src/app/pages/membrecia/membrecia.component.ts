@@ -90,4 +90,11 @@ export class MembreciaComponent implements OnInit {
       }
     });
   }
+
+  enviarBaseDatos(persona: NuevoMiembro){
+    console.log("Remove",persona);
+    this.miembrosFiltrados$ = this.miembrosFiltrados$.pipe(
+      map((nuevoMiembros: NuevoMiembro[]) => nuevoMiembros.filter(miembro => miembro.id !== persona.id))
+    );
+  }
 }

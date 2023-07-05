@@ -1,16 +1,7 @@
 <div class="modal" *ngIf="show">
   <div class="modal-content">
-    <div *ngIf="status === 'loading'">
-      <div class="spinner"></div>
-      <p>Cargando...</p>
-    </div>
-    <div *ngIf="status === 'success'">
-      <div class="check"></div>
-      <p>Exitoso</p>
-    </div>
-    <div *ngIf="status === 'failure'">
-      <div class="cross"></div>
-      <p>Fallido</p>
+    <div class="loader">
+      <div class="justify-content-center jimu-primary-loading"></div>
     </div>
   </div>
 </div>

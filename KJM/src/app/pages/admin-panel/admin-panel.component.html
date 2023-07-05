@@ -1,0 +1,18 @@
+<mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="returnPage($event)">
+    <mat-tab label="Regresar">
+    </mat-tab>
+    <mat-tab label="Usuarios" routerLink="/app-admin-panel/app-gobierno" routerLinkActive #rla1="routerLinkActive">
+        <router-outlet></router-outlet>
+    </mat-tab>
+    <mat-tab label="Afirmacion" routerLink="/app-admin-panel/app-metricas-afirmacion" routerLinkActive #rla2="routerLinkActive">
+        <router-outlet></router-outlet>
+    </mat-tab>
+    <mat-tab label="Intercesión" routerLink="/app-admin-panel/app-membrecia" routerLinkActive #rla3="routerLinkActive">
+        <router-outlet></router-outlet>
+    </mat-tab>
+    <mat-tab label="Evangelismo" routerLink="/app-admin-panel/app-membrecia" routerLinkActive #rla3="routerLinkActive">
+        <router-outlet></router-outlet>
+    </mat-tab>
+    <mat-tab label="Inicio">
+    </mat-tab>
+</mat-tab-group>

@@ -38,16 +38,28 @@ export class AuthGuardService {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> {
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const requiredRole = next.data['role'];
-    console.log("Actual userDb", this.userDb$);
 
     console.log("requiredRole", requiredRole);
+
     return this.fireAuth.authState.pipe(
       map((user) => {
         console.log("AuthGuard", user?.uid);
         if (user) {
+          if (requiredRole) {
+            if (this.userDb$.rol.length > 0) {
+              console.log("tiene roles");
+              if (this.hasRequiredRoles(this.userDb$.rol, requiredRole)) {
+                return true;
+              } else {
+                this.router.navigate(['/app-login']);
+              }
+            } else {
+              this.router.navigate(['/app-login']);
+              console.log("no tiene roles");
+            }
+          }
           return true;
         } else {
           // Si el usuario no está autenticado, redirige al usuario a la página de inicio de sesión
@@ -60,7 +72,8 @@ export class AuthGuardService {
   }
 
   private hasRequiredRoles(userRoles: string[], requiredRoles: string[]): boolean {
-    // Verifica si el usuario tiene al menos uno de los roles requeridos
+    console.log("Search ", requiredRoles);
+    console.log("inTo ", userRoles);
     return userRoles.some(role => requiredRoles.includes(role));
   }
 }

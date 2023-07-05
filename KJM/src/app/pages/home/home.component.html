@@ -6,16 +6,18 @@
 <body>
 	<header class="header">
 
-		<mat-toolbar class="mat-elevation-z8">
+		<mat-toolbar>
 			<button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
 				<mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
 				<mat-icon *ngIf="sidenav.opened"> close </mat-icon>
 			</button>
-			RJM - ReyJesusMedellin
+			<div class="toolbar-text">
+				{{userDb$.ubicacion}}
+			</div>
 		</mat-toolbar>
 
 		<mat-sidenav-container>
-			<mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+			<mat-sidenav #sidenav="matSidenav">
 				<ng-container *ngIf="userAuth$">
 					<img class="avatar mat-elevation-z8" [src]="userAuth$.photoURL?.toString()"
 						alt="User Profile Image" />
@@ -28,56 +30,73 @@
 					<p class="designation">{{userAuth$.uid}}</p>
 				</ng-container>
 
-				<mat-divider></mat-divider>
+				<ng-container *ngIf="this.roleCheck('Nuevo')">
 
-				<button mat-button class="menu-button" [routerLink]="['/app-home/app-inicio']">
-					<mat-icon>home</mat-icon>
-					<span>Home</span>
-				</button>
-				<button *ngIf="this.roleCheck('Afirmador')" mat-button class="menu-button"
-					[routerLink]="['/app-home/app-afirmacion']">
-					<mat-icon>call</mat-icon>
-					<span>Afirmacion</span>
-				</button>
-				<button *ngIf="this.roleCheck('Miembro')" mat-button class="menu-button"
-					[routerLink]="['/app-home/registro-miembro']">
-					<mat-icon>add_circle</mat-icon>
-					<span>Nuevo Miembro</span>
-				</button>
-				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
-					[routerLink]="['/app-home/app-membrecia']">
-					<mat-icon>supervisor_account</mat-icon>
-					<span>Membrecia</span>
-				</button>
+					<button mat-button class="menu-button" [routerLink]="['/app-home/app-welcome-new-user']"
+						(click)="closeNav()">
+						<mat-icon>home</mat-icon>
+						<span>NewUser</span>
+					</button>
 
-				<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
-					[routerLink]="['/app-home/app-reportes-afirmacion']">
-					<mat-icon>event_note</mat-icon>
-					<span>Reportes</span>
-				</button>
-
-				<mat-divider></mat-divider>
-
-				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button"
-					[routerLink]="['/app-home/app-gobierno']">
-					<mat-icon>card_membership</mat-icon>
-					<span>Gobierno</span>
-				</button>
-
-				<button *ngIf="this.roleCheck('Admin')" mat-button class="menu-button"
-					[routerLink]="['/app-home/app-metricas-afirmacion']">
-					<mat-icon>bar_chart</mat-icon>
-					<span>Metricas</span>
-				</button>
+				</ng-container>
 
 
+				<ng-container *ngIf="this.roleCheck('Miembro')">
 
-				<mat-divider></mat-divider>
+					<button mat-button class="menu-button" [routerLink]="['/app-home/app-inicio']" (click)="closeNav()">
+						<mat-icon>home</mat-icon>
+						<span>Home</span>
+					</button>
 
-				<button mat-button class="menu-button" (click)="fireAuth.AuthLogOut()">
-					<mat-icon>exit_to_app</mat-icon>
-					<span>LogOut</span>
-				</button>
+					<button mat-button class="menu-button" [routerLink]="['/app-home/registro-miembro']"
+						(click)="closeNav()">
+						<mat-icon>add_circle</mat-icon>
+						<span>Nuevo miembro</span>
+					</button>
+					<button mat-button class="menu-button" [routerLink]="['/app-home/app-afirmacion']"
+						(click)="closeNav()">
+						<mat-icon>call</mat-icon>
+						<span>Afirmación</span>
+					</button>
+					<button mat-button class="menu-button" (click)="closeNav()">
+						<mat-icon>hearing</mat-icon>
+						<span>Intercesión</span>
+					</button>
+					<button mat-button class="menu-button" (click)="closeNav()">
+						<mat-icon>alarm</mat-icon>
+						<span>Evangelismo</span>
+					</button>
+				</ng-container>
+
+				<ng-container *ngIf="this.roleCheck('LiderDpto')">
+					<mat-divider></mat-divider>
+					<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
+						[routerLink]="['/app-new-content/app-membrecia']" (click)="closeNav()">
+						<mat-icon>supervisor_account</mat-icon>
+						<span>Lideres</span>
+					</button>
+					<mat-divider></mat-divider>
+				</ng-container>
+
+				<ng-container *ngIf="this.roleCheck('Admin')">
+
+					<button mat-button class="menu-button" [routerLink]="['/app-admin-panel/app-gobierno']"
+						(click)="closeNav()">
+						<mat-icon>verified_user</mat-icon>
+						<span>Administración</span>
+					</button>
+
+				</ng-container>
+
+				<ng-container>
+					<mat-divider></mat-divider>
+					<button mat-button class="menu-button" (click)="fireAuth.AuthLogOut()">
+
+						<mat-icon>exit_to_app</mat-icon>
+						<span>LogOut</span>
+					</button>
+				</ng-container>
+
 			</mat-sidenav>
 			<mat-sidenav-content>
 				<div class="container">
@@ -86,24 +105,6 @@
 			</mat-sidenav-content>
 		</mat-sidenav-container>
 	</header>
-
-
-
-	<!--
-	<section>
-		<div class="container">
-			<app-afirmation-form></app-afirmation-form>
-		</div>
-	</section>
-	-->
-
-
-	<footer>
-		<div class="container">
-			<app-google-logout></app-google-logout>
-			<p>© 2023 Legacy Software</p>
-		</div>
-	</footer>
 
 	<script src="https://kit.fontawesome.com/1234567890.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

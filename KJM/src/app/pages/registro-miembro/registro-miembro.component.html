@@ -84,7 +84,7 @@
 
   <mat-vertical-stepper [linear]="true" #stepper *ngIf="autorizaCompartirInfo" class="custom-stepper">
     <mat-step [stepControl]="formGroup1">
-        <ng-template matStepLabel>Paso 1</ng-template>
+        <ng-template matStepLabel>Información general</ng-template>
         <form [formGroup]="formGroup1">
             <mat-form-field>
                 <input matInput formControlName="nombre" placeholder="Nombre completo" required>
@@ -114,16 +114,16 @@
         </form>
     </mat-step>
     <mat-step [stepControl]="formGroup2">
-        <ng-template matStepLabel>Paso 2</ng-template>
+        <ng-template matStepLabel>Información adicional</ng-template>
         <form [formGroup]="formGroup2">
             <mat-form-field>
-                <input matInput formControlName="barrio" placeholder="Barrio" required>
+                <input matInput formControlName="barrio" placeholder="Barrio">
             </mat-form-field>
             <mat-form-field>
-                <input matInput formControlName="direccion" placeholder="Dirección" required>
+                <input matInput formControlName="direccion" placeholder="Dirección">
             </mat-form-field>
             <mat-form-field>
-                <input matInput formControlName="correoElectronico" placeholder="Correo electrónico" [email]="true" required>
+                <input matInput formControlName="correoElectronico" placeholder="Correo electrónico" [email]="true">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Red</mat-label>
@@ -140,7 +140,7 @@
         </form>
     </mat-step>
     <mat-step>
-        <ng-template matStepLabel>Paso 3</ng-template>
+        <ng-template matStepLabel>Resumen</ng-template>
         <div>
             <p>Revisa los datos ingresados:</p>
             <p>Nombre: {{ formGroup1.value.nombre }}</p>

@@ -27,6 +27,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { RouterModule } from '@angular/router';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -38,7 +40,7 @@ import { AfirmationFormComponent } from './components/afirmation-form/afirmation
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { InicioComponent } from './components/inicio/inicio.component';
+import { InicioComponent } from './components/inicio/inicio1.component';
 import { MembreciaComponent } from './pages/membrecia/membrecia.component';
 import { DatePipe } from '@angular/common';
 import { RegistroMiembroComponent } from './pages/registro-miembro/registro-miembro.component';
@@ -54,6 +56,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { OnBoardingComponent } from './pages/on-boarding/on-boarding.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
+import { NewContentComponent } from './pages/new-content/new-content.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { WelcomeNewUserComponent } from './pages/welcome-new-user/welcome-new-user.component';
 
 // TODO: Compilacion => ng build --configuration production
 // TODO: Deploy => firebase deploy
@@ -97,7 +102,10 @@ const app = initializeApp(firebaseConfig);
     ReportesAfirmacionComponent,
     MetricasAfirmacionComponent,
     OnBoardingComponent,
-    LoadingModalComponent
+    LoadingModalComponent,
+    NewContentComponent,
+    AdminPanelComponent,
+    WelcomeNewUserComponent
 
   ],
   imports: [
@@ -127,7 +135,9 @@ const app = initializeApp(firebaseConfig);
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTableModule,
-    MatDialogModule,
+    MatDialogModule, 
+    MatTabsModule,
+    RouterModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -136,7 +146,7 @@ const app = initializeApp(firebaseConfig);
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [DatePipe,],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

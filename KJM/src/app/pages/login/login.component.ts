@@ -22,6 +22,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class LoginComponent implements OnDestroy {
 
+  darkMode: boolean = false;
+
   userAuth$: any;
   userDb$: any;
 
@@ -46,12 +48,16 @@ export class LoginComponent implements OnDestroy {
     this.subscriptionDb = this.appData.userDb$.subscribe(
       (userDb) => {
         this.userDb$ = userDb;
-        if (userDb.id) {
+        if (userDb.rol.length > 0) {
           if (userDb.onBoarding) {
-            this.router.navigate(['/app-home']);
+            console.log("To inicio");
+            this.router.navigate(['/app-home/app-inicio']);
           } else {
+            console.log("Req onboarding");
             this.router.navigate(['/app-on-boarding']);
           }
+        }else{
+          console.log("Else ?",userDb.id);
         }
       }
     );
@@ -59,15 +65,13 @@ export class LoginComponent implements OnDestroy {
       (userAuth) => {
         this.userAuth$ = userAuth;
       }
-    );
+    );   
 
   }
 
-  test() {
-    console.log("Test");
-
-
-    
+  toggleMode(): void {
+    this.darkMode = !this.darkMode;
+    console.log("Togle Dark",this.darkMode);
   }
 
   ngOnDestroy(): void {

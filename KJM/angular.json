@@ -29,9 +29,7 @@
               "src/custom-theme.scss",
               "src/styles.css"
             ],
-            "scripts": [
-              
-            ],
+            "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
@@ -57,7 +55,9 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           },
           "defaultConfiguration": "production"

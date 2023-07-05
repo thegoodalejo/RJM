@@ -37,6 +37,7 @@ export class FirestoreService {
     private appData: AppDataService,
     private dialog: MatDialog
   ) {
+    console.log("FireStore init");
     this.subscriptionAuth = this.appData.userAuth$.subscribe(
       (userAuth) => {
         this.userAuth$ = userAuth;
@@ -137,25 +138,28 @@ export class FirestoreService {
       disableClose: true,
       panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
     });
-    dialogRef.componentInstance.open('loading');
+    dialogRef.componentInstance.open();
+
     try {
+      console.log("Try onBoardingUpdate");
       const documentRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-      documentRef.update(data)
-        .then(() => {
-          dialogRef.componentInstance.update('success', "Actualizado exitosamente");
-          this.appData.updateOnBoading(data);
 
-          return true;
-        })
-        .catch(() => {
-          dialogRef.componentInstance.update('failure', "Error al actualizar");
-          return false;
-        });
+      await documentRef.update(data);
+      await this.appData.updateOnBoading(data);
+
+      console.log("Actualizado exitosamente => True");
+
+      return true;
     } catch (error) {
-      return false;
-    }
 
-    return false;
+      dialogRef.componentInstance.update("Error al actualizar");
+      console.log("ERR ? ", error);
+
+      return false;
+      
+    } finally {
+      dialogRef.close(); // Cerrar el diálogo después de completar las acciones
+    }
   }
 
   async getDocFromRef(docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
@@ -218,15 +222,15 @@ export class FirestoreService {
       panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
     });
 
-    dialogRef.componentInstance.open('loading');
-    const dbRef  = this.userDb$.ministerio + this.userDb$.ubicacion;
+    dialogRef.componentInstance.open();
+    const dbRef = this.userDb$.ministerio + this.userDb$.ubicacion;
     try {
       const miembrosRef = this.firestore.collection(dbRef + 'Miembros');
       await miembrosRef.add(data);
-      dialogRef.componentInstance.update('success', "Creado exitosamente");
+      dialogRef.componentInstance.update("Creado exitosamente");
       return true;
     } catch (error) {
-      dialogRef.componentInstance.update('failure', "No se pudo crear el usuario");
+      dialogRef.componentInstance.update("No se pudo crear el usuario");
       return false;
     }
   }

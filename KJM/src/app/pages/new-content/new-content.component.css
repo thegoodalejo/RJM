@@ -1,0 +1,12 @@
+.tabs-container {
+    position: relative;
+    height: 100vh; /* Ajusta la altura según tus necesidades */
+  }
+  
+  .tabs {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  
