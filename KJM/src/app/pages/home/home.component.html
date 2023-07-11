@@ -12,7 +12,7 @@
 				<mat-icon *ngIf="sidenav.opened"> close </mat-icon>
 			</button>
 			<div class="toolbar-text">
-				{{userDb$.ubicacion}}
+				{{title}}
 			</div>
 		</mat-toolbar>
 
@@ -24,13 +24,13 @@
 				</ng-container>
 
 				<ng-container *ngIf="userAuth$">
-					<h4 class="name">{{userAuth$.displayName}}</h4>
+					<h4 class="name">{{userDb$.displayName}}</h4>
 				</ng-container>
 				<ng-container *ngIf="userAuth$">
 					<p class="designation">{{userAuth$.uid}}</p>
 				</ng-container>
 
-				<ng-container *ngIf="this.roleCheck('Nuevo')">
+				<ng-container *ngIf="this.isNuevo">
 
 					<button mat-button class="menu-button" [routerLink]="['/app-home/app-welcome-new-user']"
 						(click)="closeNav()">
@@ -41,7 +41,7 @@
 				</ng-container>
 
 
-				<ng-container *ngIf="this.roleCheck('Miembro')">
+				<ng-container *ngIf="this.isMiembro">
 
 					<button mat-button class="menu-button" [routerLink]="['/app-home/app-inicio']" (click)="closeNav()">
 						<mat-icon>home</mat-icon>
@@ -68,9 +68,9 @@
 					</button>
 				</ng-container>
 
-				<ng-container *ngIf="this.roleCheck('LiderDpto')">
+				<ng-container *ngIf="this.isLiderDpto">
 					<mat-divider></mat-divider>
-					<button *ngIf="this.roleCheck('LiderDpto')" mat-button class="menu-button"
+					<button mat-button class="menu-button"
 						[routerLink]="['/app-new-content/app-membrecia']" (click)="closeNav()">
 						<mat-icon>supervisor_account</mat-icon>
 						<span>Lideres</span>
@@ -78,7 +78,7 @@
 					<mat-divider></mat-divider>
 				</ng-container>
 
-				<ng-container *ngIf="this.roleCheck('Admin')">
+				<ng-container *ngIf="this.isAdmin">
 
 					<button mat-button class="menu-button" [routerLink]="['/app-admin-panel/app-gobierno']"
 						(click)="closeNav()">

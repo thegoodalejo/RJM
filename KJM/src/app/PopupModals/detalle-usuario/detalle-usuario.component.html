@@ -1,8 +1,30 @@
-<p>detalle-usuario works!</p>
-
-<div class="container">
-    <button mat-button>Roles</button>
-    <button mat-button>Afirmar</button>
-</div>
-
-<button mat-button [mat-dialog-close]="true">Cerrar</button>
+<mat-dialog-content>
+    <h2>Editar Usuario</h2>
+    <form [formGroup]="usuarioForm">
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="Email">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="displayName" placeholder="Nombre">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Telefono</mat-label>
+            <input matInput formControlName="numeroTelefonico" placeholder="Teléfono" pattern="[0-9]*" required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Roles</mat-label>
+            <mat-label>Rol</mat-label>
+            <mat-select formControlName="rol" placeholder="Seleccione un rol">
+                <mat-option value="Miembro">Miembro</mat-option>
+                <mat-option value="LiderDpto">LiderDpto</mat-option>
+                <mat-option value="Admin">Admin</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

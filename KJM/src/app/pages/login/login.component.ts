@@ -7,6 +7,8 @@ import { AppDataService } from 'src/app/services/app-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingModalComponent } from 'src/app/components/loading-modal/loading-modal.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
+import { ConsultService } from 'src/app/services/http/consult.service';
 
 @Component({
   selector: 'app-login',
@@ -30,43 +32,27 @@ export class LoginComponent implements OnDestroy {
   private subscriptionAuth: Subscription = new Subscription;
   private subscriptionDb: Subscription = new Subscription;
 
-
-  dialogRef: any;
-
   constructor(
     public fireAuth: AuthService,
+    private fireStore: FirestoreService,
+    private http: ConsultService,
     private router: Router,
     private appData: AppDataService,
     public platform: Platform,
     private dialog: MatDialog
   ) {
-    this.dialogRef = this.dialog.open(LoadingModalComponent, {
-      disableClose: true,
-      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
-    });
-    this.dialogRef.componentInstance.open('loading');
+    
     this.subscriptionDb = this.appData.userDb$.subscribe(
       (userDb) => {
         this.userDb$ = userDb;
-        if (userDb.rol.length > 0) {
-          if (userDb.onBoarding) {
-            console.log("To inicio");
-            this.router.navigate(['/app-home/app-inicio']);
-          } else {
-            console.log("Req onboarding");
-            this.router.navigate(['/app-on-boarding']);
-          }
-        }else{
-          console.log("Else ?",userDb.id);
-        }
       }
     );
+    
     this.subscriptionAuth = this.appData.userAuth$.subscribe(
       (userAuth) => {
         this.userAuth$ = userAuth;
       }
-    );   
-
+    );
   }
 
   toggleMode(): void {
@@ -75,7 +61,6 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionAuth.unsubscribe
-    console.log("Unsuscribe");
+    this.subscriptionAuth.unsubscribe();
   }
 }

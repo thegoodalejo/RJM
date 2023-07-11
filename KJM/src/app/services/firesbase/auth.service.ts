@@ -7,71 +7,50 @@ import { Router } from '@angular/router';
 import { AppDataService } from '../app-data.service';
 import UserDb from 'src/app/models/userDb';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { ConsultService } from '../http/consult.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingModalComponent } from 'src/app/components/loading-modal/loading-modal.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnInit {
-  user: any;
+export class AuthService {
+  private dialogRef: any;
 
   private userAuth$: any;
   private userDb$: any;
-  
+
   constructor(
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
     private firestore: AngularFirestore,
+    private http: ConsultService,
     private appData: AppDataService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {
-    console.log("FireAuth init");
-    this.doStuff();
-    
-  }
-  ngOnInit(): void {
-    console.log("Auth Service...");
-  }
-
-  async doStuff(){
+    this.dialogRef = this.dialog.open(LoadingModalComponent, {
+      disableClose: true,
+      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
+    });
+    this.dialogRef.componentInstance.open('loading');
     this.fireAuth.authState.subscribe(userAuth => {
       this.userAuth$ = userAuth;
       if (userAuth) {
         this.appData.updateUserAuth(userAuth);
-        //user check
-        const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-        userRef.get().subscribe(userTmp => {
-          if (userTmp.exists) {
-            this.userDb$ = userTmp;
-            this.appData.updateUserDb(userTmp.data() as UserDb);
-          } else {
-            const data: UserDb = {
-              onBoarding: false,
-              lastConection: Date.now(),
-              nombre: this.userAuth$.displayName,
-              email: this.userAuth$.email,
-              rol: ["Nuevo"],
-              ministerio: '',
-              ubicacion: '',
-              posicion: '',
-              listToCall: [],
-              recordDate: Date.now(),
-              updateDate: Date.now(),
-              updateUser: this.userAuth$.displayName
-            };
-            userRef.set(data).then(() => {
-              console.log("Create response");
-              userRef.get().subscribe(userTmp => {
-                this.userDb$ = userTmp;
-                this.appData.updateUserDb(userTmp.data() as UserDb);
-              });
-            }).catch(err => {
-              console.log("Error => ", err);
-            });
-          }
-
-        });
+        const data = {
+          'id_firebaseRef': this.userAuth$.uid,
+          'email': this.userAuth$.email,
+          'phoneNumber': this.userAuth$.phoneNumber,
+          'displayName': this.userAuth$.displayName
+        }
+        const response = this.http.obtenerUsuarioIndividual(data);
+      }else{
+        console.log("Auth else");
       }
     });
+
   }
+
   GoogleAuth() {
     return this.AuthLogin(new GoogleAuthProvider());
   }
@@ -80,7 +59,7 @@ export class AuthService implements OnInit {
     try {
       await this.fireAuth
         .signInWithPopup(provider).then(result => {
-          console.log('You have been successfully logged in!', result);
+          console.log('You have been successfully logged in!');
         });
     } catch (error) {
       console.log(error);

@@ -47,7 +47,7 @@ export class DetalleMiembroComponent {
     }
 
     this.data.updateDate = Date.now();
-    this.data.updateUser = this.userDb.nombre;
+    this.data.updateUser = this.userDb.displayName;
     this.dialogRef.close(this.data);
   }
 

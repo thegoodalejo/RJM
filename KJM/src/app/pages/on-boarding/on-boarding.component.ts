@@ -38,21 +38,19 @@ export class OnBoardingComponent implements OnInit {
     private firestore: FirestoreService,
     private auth: AuthService,
     private router: Router,
-    private mySql: ConsultService) { }
+    private http: ConsultService) { }
 
   ngOnInit() {
-    this.mySql.obtenerMinisterios().subscribe(
+    this.http.obtenerMinisterios().subscribe(
       (response) => {
         this.ministerios = response;
       }
     );;
   }
 
-
-
   onMinisterioChange() {
     this.selectedMinisterioObj = this.ministerios.find(ministerio => ministerio.id === this.selectedMinisterioId);
-    this.mySql.obtenerSedes(this.selectedMinisterioId.toString()).subscribe(
+    this.http.obtenerSedes(this.selectedMinisterioId.toString()).subscribe(
       (response) => {
         this.sedes = response;
       }
@@ -64,33 +62,17 @@ export class OnBoardingComponent implements OnInit {
   }
 
   async updateOnBoading() {
-    const data = {
-      ministerio: this.selectedMinisterioObj.sigla,
-      ubicacion: this.selectedSedeObj.nombre,
-      onBoarding: true
-    }
-    console.log("updateOnBoading", data);
 
-    try {
-      const OK = await this.firestore.onBoardingUpdate(data);
-      if (OK) {
-        const data = {
-          id_ministerio: this.selectedMinisterioId,
-          id_sede: this.selectedSedeId
-        };
-        await this.mySql.crearUsuario(data).then(response => {
-          console.log("response.action",response.action);
-        });
-        console.log("StatikData");
-        const appData = this.appData.getStaticData();
-        appData.isNewUser = true;
-        await this.appData.updateStaticData(appData);
-        this.router.navigate(['/app-home/app-welcome-new-user']);
-      } else {
-        this.router.navigate(['/app-login']);
-      }
-    } catch (error) {
-      console.log("Error:", error);
+    const data = {
+      id_ministerio: this.selectedMinisterioId,
+      id_sede: this.selectedSedeId
+    }
+
+    const response = await this.http.actualizarUsuarioOnBoarding(data);
+    if (response) {
+      this.router.navigate(['/app-home/app-welcome-new-user']);
+    } else {
+      this.router.navigate(['/app-login']);
     }
   }
 }

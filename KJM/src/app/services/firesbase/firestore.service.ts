@@ -37,20 +37,10 @@ export class FirestoreService {
     private appData: AppDataService,
     private dialog: MatDialog
   ) {
-    console.log("FireStore init");
+    console.log("FireStore Online");
     this.subscriptionAuth = this.appData.userAuth$.subscribe(
       (userAuth) => {
         this.userAuth$ = userAuth;
-        if (this.userAuth$) {
-          const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-          userRef.get().subscribe(resp => {
-            if (resp.exists) {
-              this.appData.updateUserDb(resp.data() as UserDb);
-            } else {
-              this.syncUserDb();
-            }
-          });
-        }
       }
     );
     this.subscriptionDb = this.appData.userDb$.subscribe(
@@ -58,108 +48,6 @@ export class FirestoreService {
         this.userDb$ = userDb;
       }
     );
-  }
-
-  async syncUserDb() {
-    await this.createNewUserDb().then(() => {
-      const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-      userRef.get().subscribe(resp => {
-        if (resp.exists) {
-          this.userDb$ = resp;
-          this.appData.updateUserDb(resp.data() as UserDb);
-        }
-      });
-    });
-  }
-
-  async createNewUserDb() {
-    const userRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-    const data: UserDb = {
-      onBoarding: false,
-      lastConection: Date.now(),
-      nombre: this.userAuth$.displayName,
-      email: this.userAuth$.email,
-      rol: ["Nuevo"],
-      ministerio: '',
-      ubicacion: '',
-      posicion: '',
-      listToCall: [],
-      recordDate: Date.now(),
-      updateDate: Date.now(),
-      updateUser: this.userAuth$.displayName
-    };
-
-    await userRef.set(data).then(() => {
-      console.log("Create response");
-    }).catch(err => {
-      console.log("Error => ", err);
-    });
-  }
-
-  async createNewUser(user: any) {
-    console.log("createNewUser");
-    console.log("Current UID", user.uid);
-
-    const userRef = this.firestore.collection('usuarios').doc(user.uid);
-    const userDoc = userRef.get().subscribe(resp => {
-      console.log("Respiesta oinicia", resp);
-    });
-
-    if (!userDoc) {
-      const data: UserDb = {
-        onBoarding: false,
-        lastConection: Date.now(),
-        nombre: user.displayName,
-        email: user.email,
-        rol: ["Nuevo"],
-        ministerio: '',
-        ubicacion: '',
-        posicion: '',
-        listToCall: [],
-        recordDate: Date.now(),
-        updateDate: Date.now(),
-        updateUser: user.displayName
-      };
-
-      await userRef.set(data)
-        .then((response) => {
-          console.log('Creado Usuario ¡?¡?', response)
-        })
-        .catch(error => {
-          console.log('Error al crear usuario:', error);
-        });
-    } else {
-      console.log("El usuario ya existe");
-    }
-  }
-
-  async onBoardingUpdate(data: any): Promise<boolean> {
-    const dialogRef = this.dialog.open(LoadingModalComponent, {
-      disableClose: true,
-      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
-    });
-    dialogRef.componentInstance.open();
-
-    try {
-      console.log("Try onBoardingUpdate");
-      const documentRef = this.firestore.collection('usuarios').doc(this.userAuth$.uid);
-
-      await documentRef.update(data);
-      await this.appData.updateOnBoading(data);
-
-      console.log("Actualizado exitosamente => True");
-
-      return true;
-    } catch (error) {
-
-      dialogRef.componentInstance.update("Error al actualizar");
-      console.log("ERR ? ", error);
-
-      return false;
-      
-    } finally {
-      dialogRef.close(); // Cerrar el diálogo después de completar las acciones
-    }
   }
 
   async getDocFromRef(docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
@@ -223,14 +111,14 @@ export class FirestoreService {
     });
 
     dialogRef.componentInstance.open();
-    const dbRef = this.userDb$.ministerio + this.userDb$.ubicacion;
+    const dbRef = this.userDb$.ministerio + this.userDb$.sede;
     try {
       const miembrosRef = this.firestore.collection(dbRef + 'Miembros');
       await miembrosRef.add(data);
-      dialogRef.componentInstance.update("Creado exitosamente");
+      dialogRef.componentInstance.close("Creado exitosamente");
       return true;
     } catch (error) {
-      dialogRef.componentInstance.update("No se pudo crear el usuario");
+      dialogRef.componentInstance.close("No se pudo crear el usuario");
       return false;
     }
   }
@@ -364,7 +252,6 @@ export class FirestoreService {
       // Agregar el objeto a la lista de objetos mostrables
       objetoPpal.objetosMostrables.push(data);
     }
-
 
     console.log("objectppal data mostrable afirmacion x Miembro", objetoPpal.objetosMostrables);
 

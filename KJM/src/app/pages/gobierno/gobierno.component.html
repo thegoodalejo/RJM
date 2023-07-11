@@ -1,34 +1,21 @@
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput [(ngModel)]="filtro" (keyup)="applyFilter()" placeholder="Nombre o Telefono" #input>
-</mat-form-field>
-
-
-<table mat-table [dataSource]="gobiernoFiltrados$" class="mat-elevation-z8">
-
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef> Nombre </th>
-      <td mat-cell *matCellDef="let usuario"> {{usuario.nombre}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="afirmacion">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let persona">
-        <button mat-icon-button (click)="actualizarAfirmacion(persona)">
-          <mat-icon>call</mat-icon>
-        </button>
+<table>
+  <thead>
+    <tr>
+      <th class="name-column">Nombre</th>
+      <th class="switch-column">Activo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of usuariosNuevos" [ngClass]="{ 'inactive': !item.activo }">
+      <td class="name-column" (click)="showObject(item)">
+        <div class="overflow-ellipsis">{{ item.displayName }}</div>
       </td>
-    </ng-container>
-
-    <ng-container matColumnDef="rol">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let persona">
-        <button mat-icon-button (click)="actualizarRol(persona)">
-          <mat-icon>edit</mat-icon>
-        </button>
+      <td class="switch-column">
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="item.activo" (click)="toggleSwitch(item)">
+          <span class="slider"></span>
+        </label>
       </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="['nombre','afirmacion','rol']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['nombre','afirmacion','rol']"></tr>
-  </table>
+    </tr>
+  </tbody>
+</table>

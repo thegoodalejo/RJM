@@ -40,25 +40,12 @@ export class AuthGuardService {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const requiredRole = next.data['role'];
-
-    console.log("requiredRole", requiredRole);
-
+    console.log("Nav to => " + state.url);
     return this.fireAuth.authState.pipe(
       map((user) => {
-        console.log("AuthGuard", user?.uid);
         if (user) {
           if (requiredRole) {
-            if (this.userDb$.rol.length > 0) {
-              console.log("tiene roles");
-              if (this.hasRequiredRoles(this.userDb$.rol, requiredRole)) {
-                return true;
-              } else {
-                this.router.navigate(['/app-login']);
-              }
-            } else {
-              this.router.navigate(['/app-login']);
-              console.log("no tiene roles");
-            }
+            return this, this.hasRequiredRoles(requiredRole, this.userDb$.rol);
           }
           return true;
         } else {
@@ -71,9 +58,7 @@ export class AuthGuardService {
     );
   }
 
-  private hasRequiredRoles(userRoles: string[], requiredRoles: string[]): boolean {
-    console.log("Search ", requiredRoles);
-    console.log("inTo ", userRoles);
-    return userRoles.some(role => requiredRoles.includes(role));
+  private hasRequiredRoles(requiredRoles: string[], userRol: string): boolean {
+    return requiredRoles.includes(userRol);
   }
 }

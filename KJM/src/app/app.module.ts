@@ -36,7 +36,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { GoogleLogoutComponent } from './components/google-logout/google-logout.component';
 import { GoogleLogoinComponent } from './components/google-logoin/google-logoin.component';
 import { LoginComponent } from './pages/login/login.component';
-import { AfirmationFormComponent } from './components/afirmation-form/afirmation-form.component';
 import { AfirmacionComponent } from './pages/afirmacion/afirmacion.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
@@ -59,6 +58,7 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
 import { NewContentComponent } from './pages/new-content/new-content.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { WelcomeNewUserComponent } from './pages/welcome-new-user/welcome-new-user.component';
+import { ConsultService } from './services/http/consult.service';
 
 // TODO: Compilacion => ng build --configuration production
 // TODO: Deploy => firebase deploy
@@ -86,7 +86,6 @@ const app = initializeApp(firebaseConfig);
     LoginComponent,
     GoogleLogoutComponent,
     GoogleLogoinComponent,
-    AfirmationFormComponent,
     AfirmacionComponent,
     NotFoundComponent,
     NavBarComponent,
@@ -146,7 +145,7 @@ const app = initializeApp(firebaseConfig);
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [DatePipe],
+  providers: [DatePipe,ConsultService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

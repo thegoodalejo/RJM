@@ -21,33 +21,32 @@ import { WelcomeNewUserComponent } from './pages/welcome-new-user/welcome-new-us
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'app-login', component: LoginComponent },
-  { path: 'app-on-boarding', component: OnBoardingComponent },
+  { path: 'app-on-boarding', component: OnBoardingComponent, canActivate: [AuthGuardService] },
   {
     path: 'app-home', component: HomeComponent,
     canActivate: [AuthGuardService], data: { onBoarding: true },
     children: [
       { path: 'app-welcome-new-user', component: WelcomeNewUserComponent, canActivate: [AuthGuardService], data: { role: ['Nuevo'], onBoarding: true } },
-      { path: 'app-inicio', component: InicioComponent, canActivate: [AuthGuardService], data: { role: ['Nuevo', 'Miembro'], onBoarding: true } },
-      { path: 'app-afirmacion', component: AfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Miembro'] } },
-      { path: 'registro-miembro', component: RegistroMiembroComponent, canActivate: [AuthGuardService], data: { role: ['Miembro'] } },
-      { path: 'app-membrecia', component: MembreciaComponent, canActivate: [AuthGuardService], data: { role: ['Miembro'] } },
-      { path: 'app-reportes-afirmacion', component: ReportesAfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Miembro'] } },
-
+      { path: 'app-inicio', component: InicioComponent, canActivate: [AuthGuardService], data: { role: ['Nuevo', 'Miembro', 'LiderDpto', 'Admin'], onBoarding: true } },
+      { path: 'app-afirmacion', component: AfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Miembro', 'LiderDpto', 'Admin'] } },
+      { path: 'registro-miembro', component: RegistroMiembroComponent, canActivate: [AuthGuardService], data: { role: ['Miembro', 'LiderDpto', 'Admin'] } },
+      { path: 'app-membrecia', component: MembreciaComponent, canActivate: [AuthGuardService], data: { role: ['Miembro', 'LiderDpto', 'Admin'] } },
+      { path: 'app-reportes-afirmacion', component: ReportesAfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Miembro', 'LiderDpto', 'Admin'] } },
     ]
   },
   {
     path: 'app-new-content', component: NewContentComponent,
-    canActivate: [AuthGuardService], data: { role: ['LiderDpto'] },
+    canActivate: [AuthGuardService], data: { role: ['LiderDpto', 'Admin'] },
     children: [
-      { path: 'app-membrecia', component: MembreciaComponent, data: { role: 'Admin' } },
+      { path: 'app-membrecia', component: MembreciaComponent, canActivate: [AuthGuardService], data: { role: ['LiderDpto', 'Admin'] } },
     ]
   },
   {
     path: 'app-admin-panel', component: AdminPanelComponent,
     canActivate: [AuthGuardService], data: { role: ['Admin'] },
     children: [
-      { path: 'app-gobierno', component: GobiernoComponent },
-      { path: 'app-metricas-afirmacion', component: MetricasAfirmacionComponent },
+      { path: 'app-gobierno', component: GobiernoComponent, canActivate: [AuthGuardService], data: { role: ['Admin'] } },
+      { path: 'app-metricas-afirmacion', component: MetricasAfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Admin'] } },
     ]
   },
   { path: '**', component: NotFoundComponent }

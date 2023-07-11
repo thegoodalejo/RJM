@@ -1,0 +1,95 @@
+/* usuarios.component.scss */
+
+// Variables de colores
+$color-primary: #2d6ae2;
+$color-background: #f4f6fa;
+$color-heading: #333333;
+$color-text: #666666;
+
+.usuarios-container {
+  font-family: 'Arial', sans-serif;
+  background-color: $color-background;
+  padding: 20px;
+}
+
+.item {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+
+  &.active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.item-header {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: $color-heading;
+  cursor: pointer;
+}
+
+.item-content {
+  overflow: hidden;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes expand {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+@keyframes collapse {
+  from {
+    height: auto;
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+.expandAnimation {
+  &.expanded {
+    animation-name: expand;
+  }
+
+  &.collapsed {
+    animation-name: collapse;
+  }
+}
+
+.table-container {
+  padding: 10px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    th {
+      background-color: $color-primary;
+      color: #ffffff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  }
+}

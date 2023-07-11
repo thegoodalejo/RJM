@@ -1,0 +1,76 @@
+<!-- usuarios.component.html -->
+
+<div class="usuarios-container">
+  <div class="item" [ngClass]="{ 'active': activeItem === 1 }">
+    <div class="item-header" (click)="toggleItem(1)">Usuarios Activos</div>
+    <div class="item-content" [@expandAnimation]="activeItem === 1 ? 'expanded' : 'collapsed'">
+
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput [(ngModel)]="filtro" (keyup)="applyFilter()" placeholder="Nombre ..." #input>
+      </mat-form-field>
+
+
+      <table mat-table [dataSource]="usuariosNuevos" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
+          <td mat-cell *matCellDef="let usuario"> {{usuario.displayName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let persona">
+            <button mat-icon-button (click)="actualizarRol(persona)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['nombre','rol']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['nombre','rol']"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="item" [ngClass]="{ 'active': activeItem === 2 }">
+    <div class="item-header" (click)="toggleItem(2)">Item 2</div>
+    <div class="item-content" [@expandAnimation]="activeItem === 2 ? 'expanded' : 'collapsed'">
+      <!-- Contenido del Item 2 -->
+      awfa
+    </div>
+  </div>
+
+  <div class="item" [ngClass]="{ 'active': activeItem === 3 }">
+    <div class="item-header" (click)="toggleItem(3)">Item 3</div>
+    <div class="item-content" [@expandAnimation]="activeItem === 3 ? 'expanded' : 'collapsed'">
+      <!-- Contenido del Item 3 -->
+      wad
+    </div>
+  </div>
+
+  <div class="item" [ngClass]="{ 'active': activeItem === 4 }">
+    <div class="item-header" (click)="toggleItem(4)">Item 4</div>
+    <div class="item-content" [@expandAnimation]="activeItem === 4 ? 'expanded' : 'collapsed'">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Activo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" (click)="showObject(item)" [ngClass]="{ 'inactive': !item.activo }">
+            <td>{{ item.nombre }}</td>
+            <td>
+              <label class="switch">
+                <input type="checkbox" [(ngModel)]="item.activo" (click)="$event.stopPropagation()">
+                <span class="slider"></span>
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

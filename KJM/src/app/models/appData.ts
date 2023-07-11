@@ -1,3 +1,4 @@
 export interface AppData {
-    isNewUser: boolean;
-  }
+  sedeNombre: string;
+  usuarioNombre: string;
+}

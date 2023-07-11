@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import NuevoMiembro from 'src/app/models/nuevoMiembro';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
@@ -9,13 +9,15 @@ import { map } from 'rxjs/operators';
 import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { ConsultService } from 'src/app/services/http/consult.service';
+import { AppDataService } from 'src/app/services/app-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-registro-miembro',
   templateUrl: './registro-miembro.component.html',
   styleUrls: ['./registro-miembro.component.css']
 })
-export class RegistroMiembroComponent {
+export class RegistroMiembroComponent implements OnDestroy {
 
   formGroup1: FormGroup;
   formGroup2: FormGroup;
@@ -27,8 +29,12 @@ export class RegistroMiembroComponent {
   autorizaCompartirInfo: boolean = false;
 
   redes: string[] = [];
+  
+  private userDb$: any;
+  private subscriptionDb: Subscription = new Subscription;
 
   constructor(
+    private appData: AppDataService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private firestore: FirestoreService,
@@ -49,6 +55,16 @@ export class RegistroMiembroComponent {
       correoElectronico: ['', Validators.email],
       red: ['', Validators.required]
     });
+
+    this.subscriptionDb = this.appData.userDb$.subscribe(
+      (userDb) => {
+        this.userDb$ = userDb;
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionDb.unsubscribe();
   }
 
   nextStep() {
@@ -57,9 +73,7 @@ export class RegistroMiembroComponent {
   }
 
   submitForm() {
-    // Aquí puedes realizar la lógica para enviar el formulario
     if (this.formGroup1.valid && this.formGroup2.valid) {
-      // Ejemplo de enviar el formulario a través de una función de servicio o API
       console.log('Formulario válido. Enviar datos:', this.formGroup1.value, this.formGroup2.value);
       this.crearMiembro();
     } else {
@@ -85,12 +99,11 @@ export class RegistroMiembroComponent {
       direccion: formValue2.direccion || '',
       correo: formValue2.correoElectronico || '',
       redPerteneciente: formValue2.red || '',
-      historialAfirmacion: [],
 
       recordDate: Date.now(),
-      recordUser: "-",
+      recordUser: this.userDb$.id,
       updateDate: Date.now(),
-      updateUser: "-"
+      updateUser: this.userDb$.id
     }
 
     this.firestore.crearNuevoMiembro(data).then(ok => {

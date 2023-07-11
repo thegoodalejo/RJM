@@ -98,8 +98,8 @@ export class AfirmacionComponent implements OnDestroy {
       listToCall: [],
       objetosMostrables: []
     };
-
-    this.userDb.listToCall.forEach(member => {
+    // TODO : Fix
+    /*this.userDb.listToCall.forEach(member => {
 
       this._firestore.getDocFromRef(member).then(docSnap => {
 
@@ -112,7 +112,7 @@ export class AfirmacionComponent implements OnDestroy {
         objetoPpal.objetosMostrables.push(data);
         console.log("Push Data", data);
       })
-    })
+    })*/
 
     this.personas = objetoPpal.objetosMostrables; 
 
@@ -161,7 +161,7 @@ export class AfirmacionComponent implements OnDestroy {
     }
   }
 
-  enviarReporte() {
+  /*enviarReporte() {
 
     const datePickerLocal = this.fechaReporte as Date;
     const data: AfirmacionReporte = {
@@ -231,7 +231,7 @@ export class AfirmacionComponent implements OnDestroy {
 
     this.dataSource = [];
 
-  }
+  }*/
 
   rowInfo(row: any) {
     console.log("Row darta", row);

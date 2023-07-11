@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { QuerySnapshot, DocumentData } from 'firebase/firestore';
@@ -8,10 +8,12 @@ import ObjectWithReference from 'src/app/models/objectWithReferenc';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
 import UserDb from 'src/app/models/userDb';
 import { DetalleUsuarioComponent } from 'src/app/PopupModals/detalle-usuario/detalle-usuario.component';
-import { Observable, map } from 'rxjs';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { ActualizarRolComponent } from 'src/app/PopupModals/actualizar-rol/actualizar-rol.component';
-import { AsignarAfirmacionComponent } from 'src/app/PopupModals/asignar-afirmacion/asignar-afirmacion.component';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AppDataService } from 'src/app/services/app-data.service';
+import { ConsultService } from 'src/app/services/http/consult.service';
+import { Subscription } from 'rxjs';
+import { LoadingModalComponent } from 'src/app/components/loading-modal/loading-modal.component';
 
 export interface TestDocs {
   nombre: string,
@@ -21,98 +23,124 @@ export interface TestDocs {
 @Component({
   selector: 'app-gobierno',
   templateUrl: './gobierno.component.html',
-  styleUrls: ['./gobierno.component.css']
+  styleUrls: ['./gobierno.component.css'],
+  animations: [
+    trigger('expandAnimation', [
+      state('expanded', style({ height: '*' })),
+      state('collapsed', style({ height: '0' })),
+      transition('expanded <=> collapsed', animate('300ms ease-in-out')),
+    ]),
+  ],
 })
-export class GobiernoComponent implements OnInit {
+export class GobiernoComponent implements OnDestroy{
+
+  private userDb$: any;
+
+  //HTTP
+  usuariosNuevos: any[] = [];
+
+
   personas: ObjectWithReference<UserDb>[] = [];
   displayedColumns: string[] = ['nombre', 'telefono'];
   dataSource: TestDocs[] = [{ nombre: "a", docRef: null }];
 
   filtro: any;
-
-  private gobiernoCollection: AngularFirestoreCollection<UserDb>;
-  gobierno$: Observable<UserDb[]>;
   gobiernoFiltrados$: any;
 
+  private subscriptionDb: Subscription = new Subscription;
 
-
-  ngOnInit() {
-    this.gobierno$ = this.gobiernoCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(a => {
-          const data = a.payload.doc.data() as UserDb;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
-    this.gobiernoFiltrados$ = this.gobierno$;
-  }
+  dialogRef: any;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private appData: AppDataService,
+    private http: ConsultService,
     private _firestore: FirestoreService,
     private afs: AngularFirestore,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+
+
   ) {
 
-    this.gobiernoCollection = this.afs.collection<UserDb>('usuarios');
-    this.gobierno$ = this.gobiernoCollection.valueChanges();
-
-    const dataSource2: TestDocs[] = [];
-
-    this._firestore.getGobiernoList().then(
-      ((result: QuerySnapshot<DocumentData>) => {
-        this.dataSource = result.docs.map((doc) => {
-          return { nombre: doc.data()['nombre'], docRef: doc.ref };
-        });
-
-      })
+    this.subscriptionDb = this.appData.userDb$.subscribe(
+      (userDb) => {
+        this.userDb$ = userDb;
+        console.log("this.userDb$", this.userDb$);
+        if (this.userDb$.id > 0)
+          this.http.obtenerUsuariosSede(this.userDb$.id_sede).then(response => {
+            this.usuariosNuevos = response;
+          });
+      }
     );
-    this.dataSource = dataSource2;
+  }
+  
+  ngOnDestroy(): void {
+    this.subscriptionDb.unsubscribe();
+  }
+
+  showObject(item: any) {
+    if (item.activo) {
+      const dialogConfig = new MatDialogConfig();
+
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = item
+      
+      const localDialogRef = this.dialog.open(DetalleUsuarioComponent, dialogConfig);
+
+      localDialogRef.afterClosed().subscribe((response: any) => {
+        if (response) {
+          const usuarioFinded =
+            this.usuariosNuevos.find(itemFinded => itemFinded.id === item.id);
+          if (usuarioFinded) {
+            usuarioFinded.displayName = response.displayName,
+              usuarioFinded.numeroTelefonico = response.numeroTelefonico,
+              usuarioFinded.rol = response.rol
+          }
+        }
+      });
+    }
+
   }
 
   applyFilter() {
 
-    this.gobiernoFiltrados$ = this.gobierno$.pipe(
+    /*this.gobiernoFiltrados$ = this.gobierno$.pipe(
       map((nuevoMiembros: UserDb[]) => {
         // Aplica aquí tu lógica de filtro
         return nuevoMiembros.filter((nuevoMiembro: UserDb) => {
           return nuevoMiembro.nombre.toLowerCase().includes(this.filtro.toLowerCase());
         });
       })
-    );
+    );*/
   }
 
-  actualizarRol(usuario: UserDb) {
-    console.log("actualizarRol =>",usuario);
+  toggleSwitch(usuario: any) {
+    console.log("toggleSwitch", usuario);
 
-    const dialogRef = this.dialog.open(ActualizarRolComponent, {
-      width: '300px',
-      data: usuario
+    this.dialogRef = this.dialog.open(LoadingModalComponent, {
+      disableClose: true,
+      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("Result Data =>", result);
-      if (result) {
-        this.gobiernoCollection.doc(usuario.id).update(result);
-      }
-    });
-  }
+    this.dialogRef.componentInstance.open('loading');
 
-  actualizarAfirmacion(usuario: UserDb) {
-    console.log("actualizarAfirmacion",usuario);
+    setTimeout(() => {
 
-    const dialogRef = this.dialog.open(AsignarAfirmacionComponent, {
-      width: '300px',
-      data: usuario
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("Result Data =>", result);
-      if (result) {
-        this.gobiernoCollection.doc(usuario.id).update(result);
-      }
-    });
+      const data = {
+        id: usuario.id,
+        activo: usuario.activo
+      };
+
+      this.http.actualizarUsuarioActivar(data).then(response => {
+        if (!response) {
+          const usuarioFinded = this.usuariosNuevos.find(item => item.id === usuario.id);
+          if (usuarioFinded) {
+            usuarioFinded.activo = !usuarioFinded.activo;
+          }
+        }
+      });
+
+      this.dialogRef.componentInstance.close();
+    }, 100); // Ajusta el valor del retraso según sea necesario
   }
 }

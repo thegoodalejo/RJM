@@ -1,19 +1,21 @@
 import firebase from 'firebase/compat';
 
 export default interface UserDb {
-    id?: any;
+    id: number;
 
-    onBoarding: boolean;
-    lastConection: any;
+    id_ministerio: number;
+    id_sede: number;
 
-    nombre: string;
+    id_firebaseRef: any;
+
+    displayName: string;
     email: string;
-    rol: string[];
-    ministerio: string;
-    ubicacion: string;
-    posicion: string;
-    listToCall: firebase.firestore.DocumentReference[];
-    recordDate: any;
-    updateDate: any;
-    updateUser: any;
+    numeroTelefonico: string;
+
+    activo: boolean;
+    onBoarding: number;
+
+    recDate: any;
+    rol: string;
+    
 }

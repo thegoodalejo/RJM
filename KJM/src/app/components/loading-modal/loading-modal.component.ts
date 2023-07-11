@@ -25,18 +25,21 @@ export class LoadingModalComponent {
     }, 3000);
   }
 
-  close() {
+  close(message?: any) {
     this.show = false;
+    if (message) {
+      this.snackBar.open(message, 'Cerrar', {
+        duration: 3000
+      });
+    }
     this.dialogRef.close();
   }
 
-  update(message: any) {
+  update() {
     setTimeout(() => {
       this.close();
     }, 500);
-    this.snackBar.open(message, 'Cerrar', {
-      duration: 3000
-    });
+
   }
 
 }

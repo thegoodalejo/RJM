@@ -2,7 +2,6 @@ import firebase from 'firebase/compat';
 
 export default interface NuevoMiembro {
     id?: any;
-    ref?: firebase.firestore.DocumentReference;
 
     nombre: string; // Obligatorio
     telefono: string; // Obligatorio
@@ -14,8 +13,6 @@ export default interface NuevoMiembro {
     direccion: string; // Opcional
     correo: string; // Opcional
     redPerteneciente: string; // Opcional
-
-    historialAfirmacion: firebase.firestore.DocumentReference[];
 
     recordDate: any;
     recordUser: any;

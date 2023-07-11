@@ -48,7 +48,7 @@ export class ActualizarRolComponent {
 
   cerrarDialogo(): void {
     this.data.updateDate = Date.now();
-    this.data.updateUser = this.userDb.nombre;
+    this.data.updateUser = this.userDb.displayName;
     this.data.rol = this.ELEMENT_DATA
     .filter(item => item.isSelected === true) // Filtrar solo los objetos con valor true
     .map(item => item.rol); // Mapear solo los valores de permiso

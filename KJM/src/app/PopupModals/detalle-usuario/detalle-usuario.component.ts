@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FirestoreService } from 'src/app/services/firesbase/firestore.service';
-import firebase from 'firebase/compat';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConsultService } from 'src/app/services/http/consult.service';
 
 @Component({
   selector: 'app-detalle-usuario',
@@ -9,19 +10,40 @@ import firebase from 'firebase/compat';
   styleUrls: ['./detalle-usuario.component.css']
 })
 export class DetalleUsuarioComponent {
-  modalInfo: any;
+  usuarioForm: FormGroup;
 
   constructor(public matDialog: MatDialog,
     private dialogRef: MatDialogRef<DetalleUsuarioComponent>,
-    @Inject(MAT_DIALOG_DATA) _data: any,
-    private _firestore: FirestoreService) {
-
-    const docRef = _data.id as firebase.firestore.DocumentReference;
-
-    this._firestore.getDocFromRef(docRef).then(response => {
-      this.modalInfo = response;
-      console.log("Modal data", this.modalInfo.data());
+    @Inject(MAT_DIALOG_DATA) data: any,
+    private formBuilder: FormBuilder,
+    private http: ConsultService) {
+    console.log("Dialog updateuser init with =>", data);
+    this.usuarioForm = this.formBuilder.group({
+      id: [data.id],
+      displayName: [data.displayName, Validators.required],
+      email: [{ value: data.email, disabled: true }, Validators.required],
+      numeroTelefonico: [data.numeroTelefonico, [Validators.required, Validators.pattern("^[0-9]*$")]],
+      rol: [data.rol, Validators.required]
     });
-    
+
+  }
+
+  cancelar(): void {
+    this.dialogRef.close();
+  }
+
+  guardar(): void {
+    if (this.usuarioForm.valid) {
+      const formData = this.usuarioForm.value;
+      this.http.actualizarUsuarioInfo(formData).then(response => {
+        console.log("guardar Response => ",response);
+        if (response) {
+          this.dialogRef.close(formData);
+        } else {
+          this.dialogRef.close();
+        }
+      });
+
+    }
   }
 }

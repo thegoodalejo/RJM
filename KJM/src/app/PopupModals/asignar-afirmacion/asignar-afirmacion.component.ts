@@ -85,12 +85,12 @@ export class AsignarAfirmacionComponent implements OnInit {
   cerrarDialogo() {
     console.log("Hola");
     this.data.updateDate = Date.now();
-    this.data.updateUser = this.userDb.nombre;
+    this.data.updateUser = this.userDb.displayName;
     this.dialogRef.close(this.data);
   }
 
   onCheckboxChange(event: MatCheckboxChange, object: NuevoMiembro) {
-    if (event.checked) {
+    /*if (event.checked) {
       console.log('Objeto seleccionado:', object);
       if (object.ref) {
         if (!this.data.listToCall.includes(object.ref)) {
@@ -110,7 +110,7 @@ export class AsignarAfirmacionComponent implements OnInit {
         }
       }
       console.log(this.data.listToCall);
-    }
+    }*/
   }
 
 }
