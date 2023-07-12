@@ -128,11 +128,10 @@
             <mat-form-field>
                 <mat-label>Red</mat-label>
                 <mat-select formControlName="red" required>
-                    <mat-option value="red1">Red 1</mat-option>
-                    <mat-option value="red2">Red 2</mat-option>
-                    <mat-option value="red3">Red 3</mat-option>
+                  <mat-option *ngFor="let red of redes" [value]="red.nombre">{{ red.nombre }}</mat-option>
                 </mat-select>
-            </mat-form-field>
+              </mat-form-field>
+              
             <div class="actions">
                 <button mat-button matStepperPrevious>Volver</button>
                 <button mat-button matStepperNext>Continuar</button>

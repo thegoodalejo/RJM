@@ -36,7 +36,6 @@ export class DetalleUsuarioComponent {
     if (this.usuarioForm.valid) {
       const formData = this.usuarioForm.value;
       this.http.actualizarUsuarioInfo(formData).then(response => {
-        console.log("guardar Response => ",response);
         if (response) {
           this.dialogRef.close(formData);
         } else {

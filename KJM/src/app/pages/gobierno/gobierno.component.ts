@@ -66,13 +66,13 @@ export class GobiernoComponent implements OnDestroy{
         this.userDb$ = userDb;
         console.log("this.userDb$", this.userDb$);
         if (this.userDb$.id > 0)
-          this.http.obtenerUsuariosSede(this.userDb$.id_sede).then(response => {
+          this.http.obtenerUsuariosSede().then(response => {
             this.usuariosNuevos = response;
           });
       }
     );
   }
-  
+
   ngOnDestroy(): void {
     this.subscriptionDb.unsubscribe();
   }

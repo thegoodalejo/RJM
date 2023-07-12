@@ -16,6 +16,7 @@ import { OnBoardingComponent } from './pages/on-boarding/on-boarding.component';
 import { NewContentComponent } from './pages/new-content/new-content.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { WelcomeNewUserComponent } from './pages/welcome-new-user/welcome-new-user.component';
+import { ComingSoonComponent } from './pages/coming-soon/coming-soon.component';
 
 
 const routes: Routes = [
@@ -39,6 +40,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService], data: { role: ['LiderDpto', 'Admin'] },
     children: [
       { path: 'app-membrecia', component: MembreciaComponent, canActivate: [AuthGuardService], data: { role: ['LiderDpto', 'Admin'] } },
+      { path: 'app-coming-soon', component: ComingSoonComponent },
     ]
   },
   {
@@ -49,6 +51,7 @@ const routes: Routes = [
       { path: 'app-metricas-afirmacion', component: MetricasAfirmacionComponent, canActivate: [AuthGuardService], data: { role: ['Admin'] } },
     ]
   },
+  //{ path: 'app-coming-soon', component: ComingSoonComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

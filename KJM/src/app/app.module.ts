@@ -59,6 +59,7 @@ import { NewContentComponent } from './pages/new-content/new-content.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { WelcomeNewUserComponent } from './pages/welcome-new-user/welcome-new-user.component';
 import { ConsultService } from './services/http/consult.service';
+import { ComingSoonComponent } from './pages/coming-soon/coming-soon.component';
 
 // TODO: Compilacion => ng build --configuration production
 // TODO: Deploy => firebase deploy
@@ -104,7 +105,8 @@ const app = initializeApp(firebaseConfig);
     LoadingModalComponent,
     NewContentComponent,
     AdminPanelComponent,
-    WelcomeNewUserComponent
+    WelcomeNewUserComponent,
+    ComingSoonComponent
 
   ],
   imports: [

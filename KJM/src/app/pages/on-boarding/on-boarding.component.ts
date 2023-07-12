@@ -45,7 +45,7 @@ export class OnBoardingComponent implements OnInit {
       (response) => {
         this.ministerios = response;
       }
-    );;
+    );
   }
 
   onMinisterioChange() {

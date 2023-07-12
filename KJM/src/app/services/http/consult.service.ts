@@ -6,12 +6,14 @@ import { AppDataService } from '../app-data.service';
 import UserDb from 'src/app/models/userDb';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingModalComponent } from 'src/app/components/loading-modal/loading-modal.component';
+import NuevoMiembro from 'src/app/models/nuevoMiembro';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsultService {
+
 
   dialogRef: any;
 
@@ -70,18 +72,24 @@ export class ConsultService {
     return this.http.post(url, body);
   }
 
-  obtenerRedes(): Observable<any> {
+  async obtenerRedes(): Promise<any> {
     const url = this.baseURl + 'get_redes.php';
     const body = new FormData();
 
-    return this.http.post(url, body);
+    body.append('id_sede', this.userDb$.id_sede);
+
+    const reqResp = this.http.post(url, body);
+    const response = await lastValueFrom(reqResp);
+    console.log("obtenerRedes =>", response);
+
+    return response;    
   }
 
-  async obtenerUsuariosSede(id_sede: any): Promise<any> {
+  async obtenerUsuariosSede(): Promise<any> {
     const url = this.baseURl + 'get_nuevos_usuarios.php';
     const body = new FormData();
 
-    body.append('id_sede', id_sede);
+    body.append('id_sede', this.userDb$.id_sede);
 
     const reqResp = this.http.post(url, body);
     const response = await lastValueFrom(reqResp);
@@ -121,7 +129,7 @@ export class ConsultService {
   }
 
   async actualizarUsuarioActivar(data: any): Promise<boolean> {
-    
+
     const url = this.baseURl + 'update_usuario_activacion.php';
     const body = new FormData();
 
@@ -158,6 +166,42 @@ export class ConsultService {
     this.dialogRef.componentInstance.close();
     return response.action;
 
+  }
+
+  async crearNuevoMiembro(data: any): Promise<boolean> {
+    this.dialogRef = this.dialog.open(LoadingModalComponent, {
+      disableClose: true,
+      panelClass: 'custom-modal-container' // Ajusta el nombre de la clase según tus estilos
+    });
+
+    this.dialogRef.componentInstance.open('loading');
+
+    const url = this.baseURl + 'create_miembro.php';
+    const body = new FormData();
+
+    body.append('id_sede', this.userDb$.id_sede);
+    body.append('nombre', data.nombre);
+    body.append('fechaNacimiento', data.fechaNacimiento);
+    body.append('genero', data.genero);
+    body.append('invitadoPor', data.quienLoInvito);
+    body.append('barrio', data.barrio);
+    body.append('direccion', data.direccion);
+    body.append('correo', data.correo);
+    body.append('id_red', data.redPerteneciente);
+
+    body.append('recUserId', this.userDb$.id);
+    body.append('updtUserId', this.userDb$.id);
+
+    body.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    const reqResp = this.http.post(url, body);
+    const response: any = await lastValueFrom(reqResp);
+
+    console.log("actualizarUsuarioInfo =>", response);
+    this.dialogRef.componentInstance.close();
+    return response.action;
   }
 
 }

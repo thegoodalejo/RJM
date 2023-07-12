@@ -1,0 +1,57 @@
+/* Establecer el tamaño completo de la pantalla */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal de pantalla completa */
+.fullscreen-container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Imagen de fondo que cubre todo el contenedor */
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../assets/background/backgroundWorking.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Contenedor del título y botón */
+.title-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+/* Estilos del título */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(56, 53, 53);
+  margin-bottom: 20px;
+}
+
+/* Estilos del botón */
+.menu-button {
+  color: white;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilos del ícono del botón */
+.menu-button mat-icon {
+  margin-right: 5px;
+}

@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './registro-miembro.component.html',
   styleUrls: ['./registro-miembro.component.css']
 })
-export class RegistroMiembroComponent implements OnDestroy {
+export class RegistroMiembroComponent implements OnInit, OnDestroy {
 
   formGroup1: FormGroup;
   formGroup2: FormGroup;
@@ -28,8 +28,8 @@ export class RegistroMiembroComponent implements OnDestroy {
   //step 1
   autorizaCompartirInfo: boolean = false;
 
-  redes: string[] = [];
-  
+  redes: any[] = [];
+
   private userDb$: any;
   private subscriptionDb: Subscription = new Subscription;
 
@@ -61,6 +61,13 @@ export class RegistroMiembroComponent implements OnDestroy {
         this.userDb$ = userDb;
       }
     );
+
+  }
+
+  ngOnInit() {
+    this.http.obtenerRedes().then(response => {
+      this.redes = response;
+    });
   }
 
   ngOnDestroy(): void {
@@ -74,10 +81,9 @@ export class RegistroMiembroComponent implements OnDestroy {
 
   submitForm() {
     if (this.formGroup1.valid && this.formGroup2.valid) {
-      console.log('Formulario válido. Enviar datos:', this.formGroup1.value, this.formGroup2.value);
       this.crearMiembro();
     } else {
-      console.log('Formulario inválido. Por favor, complete todos los campos obligatorios.');
+      //TODO
     }
   }
 
@@ -98,22 +104,30 @@ export class RegistroMiembroComponent implements OnDestroy {
       barrio: formValue2.barrio,
       direccion: formValue2.direccion || '',
       correo: formValue2.correoElectronico || '',
-      redPerteneciente: formValue2.red || '',
+      redPerteneciente: this.redes.find(red => red.nombre === formValue2.red).id,
 
       recordDate: Date.now(),
       recordUser: this.userDb$.id,
       updateDate: Date.now(),
       updateUser: this.userDb$.id
+
     }
 
-    this.firestore.crearNuevoMiembro(data).then(ok => {
+    this.http.crearNuevoMiembro(data).then(response => {
+      if (response) {
+        this.formGroup1.reset();
+        this.formGroup2.reset();
+        this.stepper.selectedIndex = 0;
+      }
+    });
+
+    /*this.firestore.crearNuevoMiembro(data).then(ok => {
       if (ok) {
         this.autorizaCompartirInfo = false;
         this.formGroup1.reset();
         this.formGroup2.reset();
       }
-    });
-
+    });*/
 
   }
 
